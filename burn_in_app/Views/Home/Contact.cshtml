@@ -1,0 +1,318 @@
+﻿
+@{
+    ViewBag.Title = "maintain_bi_board_master";
+}
+<style>
+    .highligh_red {
+        color: red;
+    }
+
+    .highligh_green {
+        color: green;
+    }
+</style>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Panel Fillter</h5>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Board No.</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Models</label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option selected>Choose...</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Status</label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option selected>Choose...</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive border-0">
+                    <table class="table table-sm table-bordered table-hover caption-top" id="table_bi_master">
+                        <caption>List of Burn-in : Board</caption>
+                        <thead class="table-light border">
+                            <tr>
+                                <th scope="col">Board No.</th>
+                                <th scope="col">Board Model</th>
+                                <th scope="col">Socket</th>
+                                <th scope="col">Board status</th>
+                                <th scope="col">Tools</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        create_table_board_master(); //Create table display board master
+
+        function create_table_board_master() {
+            $('#table_bi_master').DataTable({
+                "destroy": true,
+                "searching": false,
+                "lengthChange": false,
+                "paging": false,
+                "bInfo": false,
+                "stateSave": false,
+                "scrollY": '70vh',
+                //"scrollX": true,
+                "scrollCollapse": true,
+                "lengthChange": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": "./ajax_display_board_master",
+                    "datatype": "json"
+                },
+                createdRow: function (node, data) {
+                    if (data.hasOwnProperty('BI_BOARD_STAUS_NAME')) {
+                        if (data.BI_BOARD_STAUS_NAME == 'PASSED') {
+                            $('td', node).eq(3).addClass('highligh_green');
+                        }
+                        if (data.BI_BOARD_STAUS_NAME == 'NOT PASSED') {
+                            $('td', node).eq(3).addClass('highligh_red');
+                        }
+                    }
+                },
+                columnDefs: [
+                    { targets: [0, 1, 2, 3, 4], className: 'text-center' },
+                ],
+                "columns": [
+                    { data: "BI_BOARD_NO", "name": "BI_BOARD_NO", "autoWidth": true },
+                    { data: "BI_BOARD_MODEL", "name": "BI_BOARD_MODEL", "autoWidth": true },
+                    {
+                        "render": function (data, type, Me, meta) {
+                            return '<button  type="button" class="btn btn-sm btn-primary socket_detail " aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_socket_detail" ' +
+                                'data-board_no = "' + Me.BI_BOARD_NO + '">SOCKET</button >';
+                        }
+                    },
+                    { data: "BI_BOARD_STAUS_NAME", "name": "BI_BOARD_STAUS_NAME", "autoWidth": true },
+                    {
+                        "render": function (data, type, Me, meta) {
+                            return '<button  type="button" class="btn btn-sm btn-warning edit_board" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board" ' +
+                                'data-board_no = "' + Me.BI_BOARD_NO + '">EDIT</button >';
+                        }
+                    },
+                ], // end columns
+            });
+        }
+
+        function create_table_board_socket_master_view(get_board_no) {
+            $('#table_bi_master_socket').DataTable({
+                "destroy": true,
+                "responsive": true,
+                "searching": false,
+                "paging": false,
+                "bInfo": false,
+                "stateSave": false,
+                "scrollY": '50vh',
+                "scrollCollapse": true,
+                "lengthChange": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": "./ajax_display_board_socket",
+                    "data": { "get_board_no": $('#modal_board_no_text').val() },
+                    "datatype": "json"
+                },
+                //createdRow: function (node, data) {
+                //    if (data.hasOwnProperty('BI_BOARD_STAUS_NAME')) {
+                //        if (data.BI_BOARD_STAUS_NAME == 'PASSED') {
+                //            $('td', node).eq(3).addClass('highligh_green');
+                //        }
+                //        if (data.BI_BOARD_STAUS_NAME == 'NOT PASSED') {
+                //            $('td', node).eq(3).addClass('highligh_red');
+                //        }
+                //    }
+                //},
+                columnDefs: [
+                    { targets: [0, 1, 2, 3], className: 'text-center' },
+                ],
+                "columns": [
+                    { data: "BI_BOARD_NO", "name": "BI_BOARD_NO", "autoWidth": true },
+                    { data: "BI_BOARD_MODEL", "name": "BI_BOARD_MODEL", "autoWidth": true },
+                    { data: "SOCKET_NO", "name": "SOCKET_NO", "autoWidth": true },
+                    { data: "SOCKET_STATUS_NAME", "name": "SOCKET_STATUS_NAME", "autoWidth": true },
+                ], // end columns
+            });
+        }
+
+        function create_table_board_socket_master_edit(get_board_no) {
+            $('#edit_table_bi_master_socket').DataTable({
+                "destroy": true,
+                "responsive": true,
+                "searching": false,
+                "paging": false,
+                "bInfo": false,
+                "stateSave": false,
+                "scrollY": '50vh',
+                "scrollCollapse": true,
+                "lengthChange": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": "./ajax_display_board_socket",
+                    "data": { "get_board_no": $('#modal_board_no_text').val() },
+                    "datatype": "json"
+                },
+                columnDefs: [
+                    { targets: [0, 1, 2, 3, 4], className: 'text-center' },
+                ],
+                "columns": [
+                    { data: "BI_BOARD_NO", "name": "BI_BOARD_NO", "autoWidth": true },
+                    { data: "BI_BOARD_MODEL", "name": "BI_BOARD_MODEL", "autoWidth": true },
+                    { data: "SOCKET_NO", "name": "SOCKET_NO", "autoWidth": true },
+                    //{ data: "SOCKET_STATUS_NAME", "name": "SOCKET_STATUS_NAME", "autoWidth": true },
+                    //{
+                    //    data: "SOCKET_STATUS_NAME",
+                    //    render: function (data, type, row) {
+                    //        return ' <select class="form-select" id="select_option_status_socket"> ' +
+                    //            ' <option value="O">OK</option>' +
+                    //            ' <option value="N">NG</option > ' +
+                    //            ' </select >';
+                    //    }
+                    //},
+                    {
+                        render: function (data, type, Me, row, meta) {
+                            var $select = $("<select class='form-select' id='select_option_status_socket'><option value='O'>OK</option><option value='N'>NG</option></select>");
+                            $select.find('option[value="' + Me.SOCKET_STATUS + '"]').attr('selected', 'selected');
+                            return $select[0].outerHTML
+                        },
+                    },
+                    //{
+                    //    "render": function (data, type, Me, meta) {
+                    //        return '<button  type="button" class="btn btn-sm btn-warning edit_board" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board" ' +
+                    //            'data-board_no = "' + Me.BI_BOARD_NO + '">EDIT</button >';
+                    //    }
+                    //},
+                    {
+                        "render": function (data, type, Me, meta) {
+                            return '<button  type="button" class="btn btn-sm btn-danger" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board" ' +
+                                'data-board_no = "' + Me.BI_BOARD_NO + '">DELETE</button >';
+                        }
+                    },
+                ], // end columns
+
+            });
+        }
+
+        $(document).on("click", ".socket_detail", function () {
+            var get_board_no = $(this).data('board_no');
+            $("#modal_board_no_text").val(get_board_no);
+            create_table_board_socket_master_view(get_board_no);
+        });
+
+        $(document).on("click", ".edit_board", function () {
+            var get_board_no = $(this).data('board_no');
+            $("#modal_board_no_text").val(get_board_no);
+            create_table_board_socket_master_edit(get_board_no);
+        });
+
+        $('#modal_edit_board').on('shown.bs.modal', function () {
+            $(this).trigger('resize')
+        })
+
+        $('#modal_socket_detail').on('shown.bs.modal', function () {
+            $(this).trigger('resize')
+        })
+
+    });
+</script>
+
+<div class="modal fade" id="modal_socket_detail" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalXlLabel">
+                    <input type="text" class="form-control-sm" id="modal_board_no_text" disabled />
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <h5 class="card-title">Detail Sockets</h5>
+                    <table class="table table-bordered table-hover" id="table_bi_master_socket" width="100%">
+                        <thead class="table-light border">
+                            <tr>
+                                <th scope="col">Board #No</th>
+                                <th scope="col">Board Model</th>
+                                <th scope="col">Socket</th>
+                                <th scope="col">Socket Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_edit_board" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalXlLabel">Edit board master</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div class="row justify-content-center">
+                        <h5 class="card-title">Detail Sockets</h5>
+                        @*<button class="btn btn-sm btn-primary" id="addbtn">ADD SOCKET</button>*@
+                    </div>
+                    <table class="table table-bordered table-hover" id="edit_table_bi_master_socket" width="100%">
+                        <thead class="table-light border">
+                            <tr>
+                                <th scope="col">Board #No</th>
+                                <th scope="col">Board Model</th>
+                                <th scope="col">Socket</th>
+                                <th scope="col">Socket Status</th>
+                                <th scope="col">Tools</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

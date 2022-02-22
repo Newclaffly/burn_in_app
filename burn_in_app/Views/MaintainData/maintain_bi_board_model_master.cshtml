@@ -1,0 +1,367 @@
+﻿
+@{
+    ViewBag.Title = "maintain_bi_board_model_master";
+}
+@if (Session["GOALBAL_ID"] != null)
+{
+    <style>
+    </style>
+    <input type="hidden" value="@Session["GOALBAL_ID"].ToString()" id="temp_user" />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>PANEL FILTER BOARD MODEL MASTER</b></h5>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Board Model</span>
+                                    <input type="text" class="form-control" id="filllter_board_model">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text">Product Type</label>
+                                    <select class="form-select" id="fillter_model_product_type">
+                                        <option selected>Choose...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-1">
+                        <h5> <b>BURN-IN BOARD MODEL MASTER LIST</b></h5>
+                        <button class="btn btn-sm btn-primary ml-2 mb-2 ms-Icon" data-bs-toggle="modal" data-bs-target="#modal_add_board_model_master" id="add_board_master">
+                            ADD BOARD MODEL MASTER
+                        </button>
+                    </div>
+                    <div class="table-responsive border-0">
+                        <table class="table table-sm table-bordered table-hover caption-top" id="table_bi_board_master">
+                            <thead class="table-light border">
+                                <tr>
+                                    <th scope="col">Board Model</th>
+                                    <th scope="col">Product Type</th>
+                                    <th scope="col">Socket X-Axis</th>
+                                    <th scope="col">Socket Y-Axis</th>
+                                    <th scope="col">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            get_product_type_list();
+            create_table_board_master_list();
+
+            function create_table_board_master_list() {
+                $('#table_bi_board_master').DataTable({
+                    "destroy": true,
+                    "searching": true,
+                    "lengthChange": false,
+                    "paging": false,
+                    "bInfo": false,
+                    "stateSave": false,
+                    "scrollY": '70vh',
+                    //"scrollX": true,
+                    "scrollCollapse": true,
+                    "ajax": {
+                        "type": "POST",
+                        "url": "./ajax_display_board_model_master",
+                        "datatype": "json"
+                    },
+                    columnDefs: [
+                        { targets: [0, 1, 2, 3, 4], className: 'text-center' },
+                    ],
+                    "columns": [
+                        { data: "BI_BOARD_MODEL", "name": "BI_BOARD_MODEL", "autoWidth": true },
+                        { data: "PRODUCT_TYPE", "name": "PRODUCT_TYPE", "autoWidth": true },
+                        { data: "BI_BOARD_COORDINATE_X", "name": "BI_BOARD_COORDINATE_X", "autoWidth": true },
+                        { data: "BI_BOARD_COORDINATE_Y", "name": "BI_BOARD_COORDINATE_Y", "autoWidth": true },
+                        {
+                            "render": function (data, type, Me, meta) {
+                                return '<button type="button" class="btn btn-sm btn-warning edit_board ml-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board_model_master" ' +
+                                    'data-board_model_no ="' + Me.BI_BOARD_MODEL_NO + '" data-board_model = "' + Me.BI_BOARD_MODEL + '" data-board_model_product_type = "' + Me.PRODUCT_TYPE + '" data-board_model_x = "' + Me.BI_BOARD_COORDINATE_X + '" data-board_model_y = "' + Me.BI_BOARD_COORDINATE_Y + '">EDIT</button >' +
+
+                                    '<button type="button" class="btn btn-sm btn-danger delete_board ml-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board_model_delete" ' +
+                                    'data-board_model_no ="' + Me.BI_BOARD_MODEL_NO + '" data-board_model = "' + Me.BI_BOARD_MODEL + '" data-board_model_product_type = "' + Me.PRODUCT_TYPE + '" >DELETE</button> ';
+                            }
+                        },
+                    ], // end columns
+                    "order": [[0, "asc"]]
+
+                });
+            }
+            var table = $('#table_bi_board_master').DataTable();
+
+            // btn submit modal add board model master
+            $('#btn_submit_add_board_model').click(function () {
+                var add_board_model_master = {
+                    "BI_BOARD_MODEL": $("#input_add_board_model").val(),
+                    "PRODUCT_TYPE": $("#input_add_board_model_product_type").val(),
+                    "BI_BOARD_COORDINATE_X": $("#input_add_model_socket_x").val(),
+                    "BI_BOARD_COORDINATE_Y": $("#input_add_model_socket_y").val()
+                }
+                //console.log(add_board_model_master);
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_add_board_model_master",
+                    data: { add_board_model_master: add_board_model_master },
+                    datatype: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Adding',
+                            text: 'Your board model master has been adding.'
+                            //    footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        console.log(JSON.stringify(data));
+                        $('#table_bi_board_master').DataTable().clear();
+                        $('#table_bi_board_master').DataTable().ajax.reload();
+                        $('#modal_add_board_model_master').modal('hide');
+
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            });
+
+            // GET data into input modal
+            $(document).on("click", ".edit_board", function () {
+                var get_board_model_no = $(this).data('board_model_no');
+                var get_board_model = $(this).data('board_model');
+                var get_board_model_product_type = $(this).data('board_model_product_type');
+                var get_board_model_socket_x = $(this).data('board_model_x');
+                var get_board_model_socket_y = $(this).data('board_model_y');
+
+                $(".modal-body #input_edit_board_model_no").val(get_board_model_no);
+                $(".modal-body #input_edit_board_model").val(get_board_model);
+                $(".modal-body #input_edit_board_model_product_type").val(get_board_model_product_type);
+                $(".modal-body #input_edit_model_socket_x").val(get_board_model_socket_x);
+                $(".modal-body #input_edit_model_socket_y").val(get_board_model_socket_y);
+            });
+
+            // btn submit modal edit board model master
+            $('#btn_submit_edit_board_model').click(function () {
+                var edit_board_model_master = {
+                    "BI_BOARD_MODEL_NO": $("#input_edit_board_model_no").val(),
+                    "BI_BOARD_MODEL": $("#input_edit_board_model").val(),
+                    "PRODUCT_TYPE": $("#input_edit_board_model_product_type").val(),
+                    "BI_BOARD_COORDINATE_X": $("#input_edit_model_socket_x").val(),
+                    "BI_BOARD_COORDINATE_Y": $("#input_edit_model_socket_y").val()
+                }
+                console.log(edit_board_model_master);
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_edit_board_model_master",
+                    data: { edit_board_model_master: edit_board_model_master },
+                    datatype: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Update',
+                            text: 'Your board model master has been update.'
+                            //    footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        $('#table_bi_board_master').DataTable().clear();
+                        $('#table_bi_board_master').DataTable().ajax.reload();
+                        $('#modal_edit_board_model_master').modal('hide');
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            });
+
+            function get_product_type_list() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_product_type_list",
+                    datatype: "json",
+                    success: function (data) {
+
+                        //To fillte product type master
+                        var $select = $('#fillter_model_product_type');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.PRODUCT_TYPE_AXIS + '>' + val.PRODUCT_TYPE_CONVERT + '</option>');
+                            });
+                        });
+
+                        ////To Modal add product type master
+                        //var $select = $('#input_add_board_model_product_type');
+                        //$.each(data, function (i) {
+                        //    $.each(data[i], function (key, val) {
+                        //        $select.append('<option value=' + val.PRODUCT_TYPE_AXIS + '>' + val.PRODUCT_TYPE_CONVERT + '</option>');
+                        //    });
+                        //});
+
+                        ////To Modal edit product type master
+                        //var $select = $('#input_edit_board_model_product_type');
+                        //$.each(data, function (i) {
+                        //    $.each(data[i], function (key, val) {
+                        //        $select.append('<option value=' + val.PRODUCT_TYPE_AXIS + '>' + val.PRODUCT_TYPE_CONVERT + '</option>');
+                        //    });
+                        //});
+
+                    }
+                })
+            }
+
+            $('#filllter_board_model').on('change', function () {
+                var search = [];
+                $.each($('#filllter_board_model'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(0).search(search, true, false).draw();
+            });
+
+            $('#fillter_model_product_type').on('change', function () {
+                var search = [];
+                $.each($('#fillter_model_product_type option:selected'), function () {
+                    search.push($(this).val());
+                });
+                search = search.join('|');
+                table.column(1).search(search, true, false).draw();
+            });
+
+
+        });
+    </script>
+
+    <!-- Modal add model master -->
+    <div class="modal fade" id="modal_add_board_model_master" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel"><b>ADD BOARD MODEL MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Board Model</span>
+                                <input type="text" class="form-control board_model" id="input_add_board_model" name="">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Product Type</span>
+                                <input type="text" class="form-control board_model" id="input_add_board_model_product_type" name="">
+                            </div>
+
+                            @*<div class="input-group mb-3 col-xs-6">
+                                    <label class="input-group-text" for="inputGroupSelect01">Product Type</label>
+                                    <select class="form-select" id="input_add_board_model_product_type">
+                                        <option selected>Choose...</option>
+                                    </select>
+                                </div>*@
+
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Socket X-Axis</span>
+                                <input type="number" class="form-control" id="input_add_model_socket_x">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Socket Y-Axis</span>
+                                <input type="number" class="form-control" id="input_add_model_socket_y">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btn_submit_add_board_model">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit model master -->
+    <div class="modal fade" id="modal_edit_board_model_master" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4"><b>EDIT BOARD MODEL MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <input type="hidden" class="" id="input_edit_board_model_no">
+                                <span class="input-group-text">Board Model</span>
+                                <input type="text" class="form-control" id="input_edit_board_model">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Product Type</span>
+                                <input type="text" class="form-control" id="input_edit_board_model_product_type">
+                                @*<label class="input-group-text" for="inputGroupSelect01">Product Type</label>
+                                    <select class="form-select" id="input_edit_board_model_product_type">
+                                        <option selected>Choose...</option>
+                                    </select>*@
+                            </div>
+
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Socket X-Axis</span>
+                                <input type="number" class="form-control" id="input_edit_model_socket_x">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Socket Y-Axis</span>
+                                <input type="number" class="form-control" id="input_edit_model_socket_y">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btn_submit_edit_board_model">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect("~/Login/Login_axis");
+}

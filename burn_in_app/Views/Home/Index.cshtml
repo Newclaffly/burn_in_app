@@ -1,0 +1,264 @@
+﻿@{
+    ViewBag.Title = "";
+}
+<h1>Home Page</h1>
+<!--<style>
+    .table th, td {
+        color: black;
+        text-align: center;
+    }
+
+    .scanner {
+        width: 40%;
+        height: 150px;
+    }
+</style>
+<div class="col-sm-12">
+    <div class="col-sm-12">
+        <div class="card h-100" style="">
+            <div class="card-body">
+                <h5 class="card-title"><b>Information required</b></h5>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="card h-100" style="">
+                            <div class="card-body">
+                                <h5 class="card-title"><b>Burn-In Information</b></h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Lot card</span>
+                                    <input type="text" class="form-control" id="input_lot_card" aria-describedby="">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text">Select M/C</label>
+                                    <select class="form-select" id="selection_mc">
+                                        <option selected>Choose...</option>
+                                        <option value="1">MC01</option>
+                                        <option value="2">MC02</option>
+                                        <option value="3">MC03</option>
+                                    </select>
+                                </div>   
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Zone</span>
+                                    <input type="text" class="form-control" id="zone_input" aria-describedby="">
+                                </div>-->
+                                @*<div class="input-group mb-3">
+                                    <span class="input-group-text">Quantity</span>
+                                    <input type="text" class="form-control" id="input_qty" aria-describedby="">
+                                </div>*@
+                                <!--<div class="text-center">
+                                    <img src="~/Content/IMG/barcode-scanner.png" class="scanner" alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="card h-100" style="">
+                            <div class="card-body">
+                                <h5 class="card-title"><b>Information</b></h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <div class="row">
+                                    <div class="col-sm-3 input-group mb-3">
+                                        <span class="input-group-text">Board #No</span>
+                                        <input type="text" class="form-control" id="board_no" aria-describedby="">
+                                        <div class="input-group-append">
+                                            <button type="button" class="mr-2 btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreenLg">Detail</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3 input-group mb-3">
+                                        <span class="ml-2 input-group-text">Board Model</span>
+                                        <input type="text" class="form-control" id="board_model" aria-describedby="">
+
+                                        <span class="input-group-text">Type Code</span>
+                                        <input type="text" class="form-control" id="type_cd" aria-describedby="">
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">Mark Lot</span>
+                                            <input type="text" class="form-control" id="mark_lot" placeholder="" aria-describedby="">-->
+                                            @*<span class="mr-2 input-group-text">Socket</span>
+                                          <input type="text" class="form-control" id="socket" value="50/50" aria-describedby="">*@
+
+                                            <!--<input type="hidden" class="form-control" id="socket_require_qty">
+                                            <input type="hidden" class="form-control" id="total_socket_qty">-->
+
+                                            @*<span class="mr-2 input-group-text">Remain Qty</span>
+                                            <input type="text" class="form-control" id="remain_qty" placeholder="" aria-describedby="">*@
+                                             <!--<span class="input-group-text">Quantity</span>
+                                            <input type="text" class="form-control" id="qty" placeholder="" aria-describedby="">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-group mb-3">
+                                            <span class="mr-2 input-group-text">Time burn-in</span>
+                                            <input type="text" class="form-control" id="time_burn_in" placeholder="" aria-describedby="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <button class="btn btn-theme pull-left" type="button" id="toleft"></button>
+                                    <button class="btn btn-outline-success" type="button" id="more">Confirm</button>
+                                    <button class="btn btn-theme pull-right" type="button" id="toright"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    @*<div class="row">
+        <div class="" id="table_history_footer ">
+            <div class="card mt-4">
+                <h5 class="card-header"><b>Operation transaction</b></h5>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <div class="div_table_history table-responsive">
+                        <table class="table table-bordered table-hover" id="table_history">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Detail</th>
+                                    <th scope="col">Time Operation</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Update by</th>
+                                    <th scope="col">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>DT1xxxx</td>
+                                    <td>10</td>
+                                    <td>Ready</td>
+                                    <td>Admin_test</td>
+                                    <td>
+                                        <button class="btn btn-md btn-success ml-2">Start BI</button>
+                                        <button class="btn btn-md btn-primary ml-2">Update socket</button>
+                                        <button class="btn btn-md btn-danger ml-2">End BI</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>DT2xxxx</td>
+                                    <td>10</td>
+                                    <td>Ready</td>
+                                    <td>Admin_test</td>
+                                    <td>
+                                        <button class="btn btn-md btn-success ml-2">Start BI</button>
+                                        <button class="btn btn-md btn-primary ml-2">Update socket</button>
+                                        <button class="btn btn-md btn-danger ml-2">End BI</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>DT3xxxx</td>
+                                    <td>10</td>
+                                    <td>Ready</td>
+                                    <td>Admin_test</td>
+                                    <td>
+                                        <button class="btn btn-md btn-success ml-2">Start BI</button>
+                                        <button class="btn btn-md btn-primary ml-2">Update socket</button>
+                                        <button class="btn btn-md btn-danger ml-2">End BI</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4</th>
+                                    <td>DT4xxxx</td>
+                                    <td>10</td>
+                                    <td>Ready</td>
+                                    <td>Admin_test</td>
+                                    <td>
+                                        <button class="btn btn-md btn-success ml-2">Start BI</button>
+                                        <button class="btn btn-md btn-primary ml-2">Update socket</button>
+                                        <button class="btn btn-md btn-danger ml-2">End BI</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<!--</div>
+
+<script>
+    $(document).ready(function () {
+        suggest_board_information();
+        function suggest_board_information() {
+            $.ajax({
+                url: './ajax_display_board_socket',
+                type: 'POST',
+                data: '',
+                datatype: 'JSON',
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(xhr.statusText);
+                    alert(thrownError);
+                }
+            });
+        }
+    });
+</script>
+
+<div class="modal fade" id="exampleModalFullscreenLg" tabindex="-1" aria-labelledby="exampleModalFullscreenLgLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalFullscreenLgLabel">Full screen below lg</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <table class="table table-bordered table-hover" id="table_history">
+                        <thead>
+                            <tr>
+                                <th scope="col">Board #No</th>
+                                <th scope="col">Model</th>
+                                <th scope="col">Socket avaliable Qty</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>DT1xxxx</td>
+                                <td>10</td>
+                                <td>Ready</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>DT2xxxx</td>
+                                <td>10</td>
+                                <td>Ready</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>DT3xxxx</td>
+                                <td>10</td>
+                                <td>Ready</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>DT4xxxx</td>
+                                <td>10</td>
+                                <td>Ready</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>-->

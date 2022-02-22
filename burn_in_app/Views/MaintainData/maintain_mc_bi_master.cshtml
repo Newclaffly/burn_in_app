@@ -1,0 +1,357 @@
+﻿
+@{
+    ViewBag.Title = "maintain_mc_bi_master";
+}
+@if (Session["GOALBAL_ID"] != null)
+{
+    <style>
+    </style>
+    <input type="hidden" value="@Session["GOALBAL_ID"].ToString()" id="temp_user" />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>PANEL FILTER BURN-IN MACHINE</b></h5>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Machine No.</span>
+                                    <input type="text" class="form-control" id="filllter_mc_no">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text">Machine Model</label>
+                                    <select class="form-select" id="fillter_mc_model">
+                                        <option selected>Choose...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Machine Slot (Board)</span>
+                                    <input type="text" class="form-control" id="filllter_mc_capacity">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-1">
+                        <h5> <b>BURN-IN MACHINE MASTER LIST</b></h5>
+                        <button class="btn btn-sm btn-primary ml-2 mb-2 ms-Icon" data-bs-toggle="modal" data-bs-target="#modal_add_mc_master" id="add_board_master">
+                            ADD BURN-IN MACHINE MASTER
+                        </button>
+                    </div>
+                    <div class="table-responsive border-0">
+                        <table class="table table-sm table-bordered table-hover caption-top" id="table_bi_mc_master">
+                            <thead class="table-light border">
+                                <tr>
+                                    <th scope="col">Machine No.</th>
+                                    <th scope="col">Machine Model</th>
+                                    <th scope="col">Machine Slot (Board)</th>
+                                    <th scope="col">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            create_table_mc_master_list();
+            var table = $('#table_bi_mc_master').DataTable();
+
+            get_mc_model();
+
+            function create_table_mc_master_list() {
+                $('#table_bi_mc_master').DataTable({
+                    "destroy": true,
+                    "searching": true,
+                    "lengthChange": false,
+                    "paging": false,
+                    "bInfo": false,
+                    "stateSave": false,
+                    "scrollY": '70vh',
+                    //"scrollX": true,
+                    "scrollCollapse": true,
+                    "ajax": {
+                        "type": "POST",
+                        "url": "./ajax_display_mc_master",
+                        "datatype": "json"
+                    },
+                    //createdRow: function (node, data) {
+                    //    if (data.hasOwnProperty('BI_BOARD_STAUS_NAME')) {
+                    //        if (data.BI_BOARD_STAUS_NAME == 'PASSED') {
+                    //            $('td', node).eq(3).addClass('highligh_green');
+                    //        }
+                    //        if (data.BI_BOARD_STAUS_NAME == 'NOT PASSED') {
+                    //            $('td', node).eq(3).addClass('highligh_red');
+                    //        }
+                    //    }
+                    //},
+                    columnDefs: [
+                        { targets: [0, 1, 2, 3], className: 'text-center' },
+                    ],
+                    "columns": [
+                        { data: "BI_MC_NO", "name": "BI_MC_NO", "autoWidth": true },
+                        { data: "BI_MC_MODEL", "name": "BI_MC_MODEL", "autoWidth": true },
+                        { data: "BI_MC_CAPACITY_BOARD", "name": "BI_MC_CAPACITY_BOARD", "autoWidth": true },
+                        {
+                            "render": function (data, type, Me, meta) {
+                                return '<button type="button" class="btn btn-sm btn-warning edit_mc_master mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_mc_master" ' +
+                                    'data-bi_mc_no_run ="' + Me.BI_MC_NO_RUN + '" data-bi_mc_no ="' + Me.BI_MC_NO + '" data-bi_mc_model = "' + Me.BI_MC_MODEL + '" data-bi_mc_cap = "' + Me.BI_MC_CAPACITY_BOARD + '">EDIT</button >' +
+
+                                    '<button type="button" class="btn btn-sm btn-danger delete_mc_master mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#" ' +
+                                    'data-bi_mc_no_run ="' + Me.BI_MC_NO_RUN + '"  data-board_model_no ="' + Me.BI_BOARD_MODEL_NO + '" data-board_model = "' + Me.BI_BOARD_MODEL + '" data-board_model_product_type = "' + Me.PRODUCT_TYPE + '" >DELETE</button> ';
+                            }
+                        },
+                    ], // end columns
+                });
+            }
+
+            $('#btn_submit_add_mc').click(function () {
+                var add_mc_master = {
+                    "BI_MC_NO": $("#input_add_mc_master").val(),
+                    "BI_MC_MODEL": $("#input_add_mc_model option:selected").val()
+                }
+                console.log(add_mc_master);
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_add_mc_master",
+                    data: { add_mc_master: add_mc_master },
+                    datatype: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Adding',
+                            text: 'Your M/C master has been Adding.'
+                            //    footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        console.log(JSON.stringify(data));
+                        $('#table_bi_mc_master').DataTable().clear();
+                        $('#table_bi_mc_master').DataTable().ajax.reload();
+                        $('#modal_add_mc_master').modal('hide');
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            });
+
+            // GET data into input modal
+            $(document).on("click", ".edit_mc_master", function () {
+                var get_mc_run_no = $(this).data('bi_mc_no_run');
+                var get_mc_no = $(this).data('bi_mc_no');
+                var get_mc_model = $(this).data('bi_mc_model');
+
+                $(".modal-body #input_edit_mc_master_run_no").val(get_mc_run_no);
+                $(".modal-body #input_edit_mc_master").val(get_mc_no);
+                $(".modal-body #input_edit_mc_model").val(get_mc_model);
+            });
+
+            // btn submit modal edit m/c master
+            $('#btn_submit_edit_mc').click(function () {
+                var edit_mc_master = {
+                    "BI_MC_NO_RUN": $("#input_edit_mc_master_run_no").val(),
+                    "BI_MC_NO": $("#input_edit_mc_master").val(),
+                    "BI_MC_MODEL": $("#input_edit_mc_model option:selected").val()
+                }
+                console.log(edit_mc_master);
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_edit_mc_master",
+                    data: { edit_mc_master: edit_mc_master },
+                    datatype: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Update',
+                            text: 'Your M/C master has been update.'
+                            //    footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        $('#table_bi_mc_master').DataTable().clear();
+                        $('#table_bi_mc_master').DataTable().ajax.reload();
+                        $('#modal_edit_mc_master').modal('hide');
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            });
+
+            function get_mc_model() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_mc_model_master",
+                    datatype: "json",
+                    success: function (data) {
+                        var $select = $('#fillter_mc_model');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val + '>' + val + '</option>');
+                            });
+                        });
+
+                        //To Modal add mc master
+                        var $select = $('#input_add_mc_model');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val + '>' + val + '</option>');
+                            });
+                        });
+
+                        //To Modal edit master
+                        var $select = $('#input_edit_mc_model');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val + '>' + val + '</option>');
+                            });
+                        });
+
+                    }
+                })
+            }
+
+            $('#filllter_mc_no').on('change', function () {
+                var search = [];
+                $.each($('#filllter_mc_no'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(0).search(search, true, false).draw();
+            });
+
+            $('#fillter_mc_model').on('change', function () {
+                var search = [];
+                $.each($('#fillter_mc_model option:selected'), function () {
+                    search.push($(this).val());
+                });
+                search = search.join('|');
+                table.column(1).search(search, true, false).draw();
+            });
+
+            $('#filllter_mc_capacity').on('change', function () {
+                var search = [];
+                $.each($('#filllter_mc_capacity'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(2).search(search, true, false).draw();
+            });
+
+        });
+    </script>
+    <!-- Add mc bi-->
+    <div class="modal fade" id="modal_add_mc_master" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel"><b>ADD BURN-IN MACHINE MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Machine No.</span>
+                                <input type="text" class="form-control" id="input_add_mc_master">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <label class="input-group-text">Machine Model</label>
+                                <select class="form-select" id="input_add_mc_model">
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        @*<div class="col">
+                                <div class="input-group mb-3 col-xs-6">
+                                    <span class="input-group-text">Machine Slot (Board)</span>
+                                    <input type="number" class="form-control" id="input_add_mc_slot_qty">
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btn_submit_add_mc">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit MC master -->
+    <div class="modal fade" id="modal_edit_mc_master" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel"><b>EDIT BURN-IN MACHINE MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <input type="hidden" class="" id="input_edit_mc_master_run_no">
+                                <span class="input-group-text">Machine No.</span>
+                                <input type="text" class="form-control" id="input_edit_mc_master">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <label class="input-group-text">Machine Model</label>
+                                <select class="form-select" id="input_edit_mc_model">
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        @*<div class="col">
+                                <div class="input-group mb-3 col-xs-6">
+                                    <span class="input-group-text">Machine Slot (Board)</span>
+                                    <input type="number" class="form-control" id="input_edit_mc_slot">
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btn_submit_edit_mc">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect("~/Login/Login_axis");
+}

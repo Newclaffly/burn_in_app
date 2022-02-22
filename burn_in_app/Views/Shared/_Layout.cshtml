@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    <!-- Javascript Library -->
+    <script type="text/javascript" src="~/Scripts/jquery-3.6.0.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/DataTables/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="~/Scripts/DataTables/js/dataTables.bootstrap5.js"></script>
+    <script type="text/javascript" src="~/Scripts/fontawesome-free/js/fontawesome.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="~/Scripts/dayjs.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/sweetalert2@11.js"></script>
+
+    <!-- CSS Library -->
+    <link rel="stylesheet" href="~/Content/bootstrap.css">
+    <link rel="stylesheet" href="~/Scripts/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="~/Scripts/DataTables/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="~/Scripts/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+
+
+</head>
+<body class="color-screen-layout">
+    <style>
+        .color-screen-layout {
+            background-color: #f1f5f9;
+        }
+
+        .bg-nav-custom-color {
+            background-color: #1f2024;
+        }
+
+        .text-custom-nav {
+            color: white;
+        }
+
+        .divider2 {
+            background-color: white;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg bg-nav-custom-color mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand text-custom-nav" href="@Url.Action("operation_record", "RecordOperation")">
+                <i class="fas fa-home">  BIAPP</i>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    @*<li class="nav-item">
+                            <a class="nav-link text-custom-nav active" aria-current="page" href="@Url.Action("suggest_board", "Suggest")">
+                                <i class="fab fa-android">
+                                    Suggest board
+                                </i>
+                            </a>
+                        </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link text-custom-nav active" aria-current="page" href="@Url.Action("operation_record", "RecordOperation")">
+                            <i class="fas fa-clipboard">
+                                Record operation
+                            </i>
+                        </a>
+                    </li>
+                       <li class="nav-item">
+                        <a class="nav-link text-custom-nav active" aria-current="page" href="@Url.Action("transaction_operation", "Transaction")">
+                            <i class="fas fa-clipboard">
+                                Operation
+                            </i>
+                        </a>
+                    </li>
+                    @*<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-custom-nav" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-file-export">
+                                Reports
+                            </i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item " href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>*@
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-custom-nav" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-tools">  Maintain data</i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("maintain_bi_board_master", "MaintainData")">
+                                    <i class="fas fa-wrench">
+                                        Board Master
+                                    </i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("maintain_bi_board_model_master", "MaintainData")">
+                                    <i class="fas fa-wrench">
+                                        Board Model
+                                    </i>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("maintain_mc_bi_master", "MaintainData")">
+                                    <i class="fas fa-wrench">
+                                        Machine Master
+                                    </i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("maintain_mc_model_bi_master", "MaintainData")">
+                                    <i class="fas fa-wrench">
+                                        Machine Model
+                                    </i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    @*<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-custom-nav" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-hammer">
+                                Maintain system
+                            </i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                            <li><a class="dropdown-item " href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link text-custom-nav" aria-current="page" href="http://43.72.1.2/IE/Web/SDT_APP_COM.aspx">IED</a>
+                    </li>
+                </ul>
+                 <span class="mr-4 d-none d-lg-inline small" style="color:white;"><i class="ms-Icon ms-Icon--LeaveUser"></i>  @Session["GOALBAL_ID"].ToString() </span>
+                <a class="btn btn-sm btn-danger ms-Icon ms-Icon--SignOut " id="logout" href="@Url.Action("Logout", "Login")"> Logout</a>
+                <input id="permission" type="hidden" value="" />
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid mt-4">
+        @RenderBody()
+    </div>
+    @RenderSection("scripts", required: false)
+    <script>
+        if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+            window.location = 'microsoft-edge:' + window.location;
+            setTimeout(function () {
+                window.location = 'https://go.microsoft.com/fwlink/?linkid=2135547';
+            }, 1);
+        }
+    </script>
+</body>
+</html>

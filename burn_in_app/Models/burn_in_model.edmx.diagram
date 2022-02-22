@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0b34bdffd09440eb8f1822ccd4e66826" Name="Diagram1">
+        <EntityTypeShape EntityType="BURN_INModel.BI_BOARD_MODEL_PRODUCT_MST" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_BOARD_PM_TRANS" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_BOARD_SOCKET_MST" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_BOARD_SOCKET_STATUS_MST" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_BOARD_STATUS_MST" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_BOARD_TRANS" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_BORD_MST" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_HIST_MST" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_MC_CONDITION_DB_MST" Width="1.5" PointX="6.75" PointY="5.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_MC_MODEL_MST" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_MC_MST" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_MC_RECIPE_MST" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_MC_STATUS" Width="1.5" PointX="8.75" PointY="6.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_OPERATION_TRANSACTION" Width="1.5" PointX="2.75" PointY="9.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_PRODUCT_TYPE_LIST_MST" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="BURN_INModel.BI_TRANSACTION_STATUS_MST" Width="1.5" PointX="6.75" PointY="9.75" />
+        <EntityTypeShape EntityType="BURN_INModel.sdt_member" Width="1.5" PointX="9.375" PointY="9.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

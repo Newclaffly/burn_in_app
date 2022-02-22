@@ -1,0 +1,780 @@
+﻿
+@{
+    ViewBag.Title = "maintain_bi_board_master";
+}
+@if (Session["GOALBAL_ID"] != null)
+{
+    <style>
+        .highligh_red {
+            color: red;
+        }
+
+        .highligh_green {
+            color: green;
+        }
+    </style>
+    <input type="hidden" value="@Session["GOALBAL_ID"].ToString()" id="temp_user" />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>PANEL FILTER BOARD MASTER</b></h5>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Board No.</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="fillter_board_no">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelect01">Board Models</label>
+                                    <select class="form-select" id="fillter_board_model">
+                                        <option selected>Choose...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelect01">Board Status</label>
+                                    <select class="form-select" id="fillter_board_status">
+                                        <option selected>Choose...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Last PM Date</span>
+                                    <input type="text" class="form-control datepicker" id="fillter_last_pm_date">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Next PM Date</span>
+                                    <input type="text" class="form-control datepicker" id="fillter_next_pm_date">
+                                </div>
+                            </div>
+                            @*<div class="col-sm-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">Lifetime</span>
+                                        <input type="text" class="form-control datepicker" id="fillter_life_time">
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-1">
+                        <h5> <b>BURN-IN BOARD MASTER LIST</b></h5>
+                        <button class="btn btn-sm btn-primary ml-2 mb-2 ms-Icon" data-bs-toggle="modal" data-bs-target="#modal_add_board_master" id="add_board_master">
+                            ADD BOARD MASTER
+                        </button>
+                    </div>
+                    <div class="table-responsive border-0">
+                        <table class="table table-sm table-bordered table-hover caption-top" id="table_bi_board_master">
+                            <thead class="table-light border">
+                                <tr>
+                                    <th scope="col">Board No.</th>
+                                    <th scope="col">Board Model</th>
+                                    <th scope="col">Last PM Date</th>
+                                    <th scope="col">Next PM Date</th>
+                                    <th scope="col">Lifetime (Hr.)</th>
+                                    <th scope="col">Lifetime Currents (Hr.)</th>
+                                    <th scope="col">Board Status</th>
+                                    @*<th scope="col">Board Operating</th>*@
+                                    <th scope="col">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            //test();
+            //var table = $('#table_bi_board_master').DataTable();
+
+            get_board_model();
+            create_table_board_master_list();
+            var table = $('#table_bi_board_master').DataTable();
+
+            get_board_status();
+
+            $('.datepicker').datepicker(
+                { format: 'yyyy-mm-dd' }
+            )
+
+            function create_table_board_master_list() {
+                $('#table_bi_board_master').DataTable({
+                    "destroy": true,
+                    "searching": true,
+                    "lengthChange": false,
+                    "paging": false,
+                    "bInfo": false,
+                    "stateSave": false,
+                    "scrollY": '70vh',
+                    //"scrollX": true,
+                    "scrollCollapse": true,
+                    "ajax": {
+                        "type": "POST",
+                        "url": "./ajax_display_board_master",
+                        "datatype": "json"
+                    },
+                    //createdRow: function (node, data) {
+                    //    if (data.hasOwnProperty('BI_BOARD_STAUS_NAME')) {
+                    //        if (data.BI_BOARD_STAUS_NAME == 'PASSED') {
+                    //            $('td', node).eq(5).addClass('highligh_green');
+                    //        }
+                    //        if (data.BI_BOARD_STAUS_NAME == 'PM EXPIRED') {
+                    //            $('td', node).eq(5).addClass('highligh_red');
+                    //        }
+                    //        if (data.BI_BOARD_STAUS_NAME == 'NOT PASSED') {
+                    //            $('td', node).eq(5).addClass('highligh_red');
+                    //        }
+                    //    }
+                    //},
+                    columnDefs: [
+                        { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: 'text-center' },
+                    ],
+                    "columns": [
+                        { data: "BI_BOARD_NO", "name": "BI_BOARD_NO", "autoWidth": true },
+                        { data: "BI_BOARD_MODEL", "name": "BI_BOARD_MODEL", "autoWidth": true },
+                        {
+                            data: "BI_BOARD_LAST_PM",
+                            "render": function (value) {
+                                if (value === null) return "";
+                                var date = eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                                return dayjs(date).format('YYYY-MM-DD');
+                            }
+                        },
+                        {
+                            data: "BI_BOARD_NEXT_PM",
+                            "render": function (value) {
+                                if (value === null) return "";
+                                var date = eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                                return dayjs(date).format('YYYY-MM-DD');
+                            }
+                        },
+                        { data: "LIFE_TIME", "name": "LIFE_TIME", "autoWidth": true },
+                        { data: "LIFE_TIME_CURRENT", "name": "LIFE_TIME_CURRENT", "autoWidth": true },
+                        {
+                            data: 'BI_BOARD_STAUS_NAME', name: 'BI_BOARD_STAUS_NAME',
+                            render: function (data, type, row) {
+                                status = '';
+                                switch (data) {
+                                    case 'PM EXPIRED':
+                                        status = '<span class="badge bg-danger">' + data + '</span>';
+                                        break;
+                                    case 'PASSED':
+                                        status = '<span class="badge bg-success">' + data + '</span>';
+                                        break;
+                                    case 'NOT PASSED':
+                                        status = '<span class="badge bg-danger">' + data + '</span>';
+                                        break;
+                                }
+                                return status;
+                            }
+                        },
+                        //{ data: "BI_BOARD_OPARATE", "name": "BI_BOARD_OPARATE", "autoWidth": true },
+                        {
+                            "render": function (data, type, Me, meta) {
+                                return '<button type="button" class="btn btn-sm btn-warning edit_board mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board_master" ' +
+                                    'data-board_no_run ="' + Me.BI_BOARD_NO_RUN + '" data-board_no = "' + Me.BI_BOARD_NO + '" data-board_model = "' + Me.BI_BOARD_MODEL + '" ' +
+                                    'data-board_regis_date = "' + Me.BI_BOARD_REGISTRATION_DATE + '" data-board_last_pm = "' + Me.BI_BOARD_LAST_PM + '" data-board_next_pm = "' + Me.BI_BOARD_NEXT_PM + '" ' +
+                                    'data-board_life_time = "' + Me.BI_BOARD_LIFE_TIME + '" data-board_life_time_condition = "' + Me.LIFE_TIME + '" data-board_board_status_name = "' + Me.BI_BOARD_STAUS_NAME + '" ' +
+                                    'data-board_status = "' + Me.BI_BOARD_STATUS + '" data-board_oprate = "' + Me.BI_BOARD_OPARATE + '" ' +
+                                    '> EDIT</button > ' +
+
+                                    //'<button type="button" class="btn btn-sm btn-primary update_socket_board mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_update_socket_board_master" ' +
+                                    //'data-board_no_run ="' + Me.BI_BOARD_NO_RUN + '" data-board_no = "' + Me.BI_BOARD_NO + '" data-board_model = "' + Me.BI_BOARD_MODEL + '" ' +
+                                    //'data-board_regis_date = "' + Me.BI_BOARD_REGISTRATION_DATE + '" data-board_last_pm = "' + Me.BI_BOARD_LAST_PM + '" data-board_next_pm = "' + Me.BI_BOARD_NEXT_PM + '" ' +
+                                    //'data-board_life_time = "' + Me.BI_BOARD_LIFE_TIME + '" data-board_life_time_condition = "' + Me.LIFE_TIME + '" data-board_board_status_name = "' + Me.BI_BOARD_STAUS_NAME + '" ' +
+                                    //'data-board_status = "' + Me.BI_BOARD_STATUS + '" data-board_oprate = "' + Me.BI_BOARD_OPARATE + '" ' +
+                                    //'> UPDATE SOCKET</button > ' +
+
+                                    '<button type="button" class="btn btn-sm btn-danger delete_board mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_edit_board_delete" ' +
+                                    'data-board_no_run ="' + Me.BI_BOARD_NO_RUN + '" data-board_no = "' + Me.BI_BOARD_NO + '" data-board_model = "' + Me.BI_BOARD_MODEL + '" > DELETE</button > ';
+                            }
+                        },
+                    ], // end columns
+                    "order": [[0, 6, "desc"]]
+
+                });
+            }
+
+            function check_board_duplicate(para) {
+                console.log(para);
+                var temp = para;
+
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_board_dupicate",
+                    data: '',
+                    datatype: "json",
+                    success: function (data) {
+                        var data_fillter_array = data.filter(function (entry) {
+                            return entry.BI_BOARD_NO === temp;
+                        });
+                        //console.log(data_fillter_array);
+                        if (data_fillter_array == '') {
+                            //$("#btn_submit_add_board").removeAttr("disabled");
+                            var add_board_master = {
+                                "BI_BOARD_NO": $("#input_add_board_no").val(),
+                                "BI_BOARD_MODEL": $("#input_add_board_model option:selected").val(),
+                                "BI_BOARD_REGISTRATION_DATE": $("#input_add_board_regis_date").val(),
+                                "BI_BOARD_LAST_PM": $("#input_add_last_pm").val(),
+                                //"BI_BOARD_LIFE_TIME": $("#input_add_life_time").val(),
+                                "LIFE_TIME": $("#input_add_life_time_condition").val(),
+                                "BI_BOARD_STATUS": $("#input_add_board_stauts option:selected").val(),
+                                "BI_BOARD_OPARATE": $("#input_add_board_op option:selected").val()
+                            }
+
+                            $.ajax({
+                                type: "POST",
+                                url: "./ajax_add_board_master",
+                                data: { add_board_master: add_board_master },
+                                datatype: "json",
+                                success: function (data) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Adding',
+                                        text: 'Your board master has been Adding.'
+                                        //    footer: '<a href="">Why do I have this issue?</a>'
+                                    })
+                                    console.log(JSON.stringify(data));
+                                    $('#table_bi_board_master').DataTable().clear();
+                                    $('#table_bi_board_master').DataTable().ajax.reload();
+                                    $('#modal_add_board_master').modal('hide');
+                                },
+                                error: function (request, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Something went wrong!',
+                                        footer: '<a href="">Why do I have this issue?</a>'
+                                    })
+                                }
+                            })
+                        } else {
+                            //$("#btn_submit_add_board").attr("disabled", true);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Board No. duplicate!',
+                                footer: '<a href="">Why do I have this issue?</a>'
+                            })
+                        }
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            }
+            // btn submit modal add board model master
+            $('#btn_submit_add_board').click(function () {
+                //console.log(add_board_master);
+                check_board_duplicate($("#input_add_board_no").val());
+            });
+
+            // GET data into input modal
+            $(document).on("click", ".edit_board", function () {
+                var get_board_no_run = $(this).data('board_no_run');
+                var get_board_no = $(this).data('board_no');
+                var get_board_model = $(this).data('board_model');
+                var get_board_regis_date_btn = $(this).data('board_regis_date');
+                var date_regis_date = eval(get_board_regis_date_btn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                var get_board_regis_date = dayjs(date_regis_date).format('YYYY-MM-DD');
+
+                var get_board_last_pm_btn = $(this).data('board_last_pm');
+                var date_last_pm_date = eval(get_board_last_pm_btn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                var get_board_last_pm = dayjs(date_last_pm_date).format('YYYY-MM-DD');
+
+                var get_board_next_pm_btn = $(this).data('board_next_pm');
+                var date_next_pm_date = eval(get_board_next_pm_btn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                var get_board_next_pm = dayjs(date_next_pm_date).format('YYYY-MM-DD');
+
+                //var get_board_life_time_btn = $(this).data('board_life_time');
+                //var date_life_time_date = eval(get_board_life_time_btn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                //var get_board_life_time = dayjs(date_life_time_date).format('YYYY-MM-DD');
+
+                var get_board_life_time_condition = $(this).data('board_life_time_condition');
+                var get_board_status_name = $(this).data('board_board_status_name');
+                var get_board_status = $(this).data('board_status');
+                var get_board_oprate = $(this).data('board_oprate');
+
+                $(".modal-body #input_edit_board_no_run").val(get_board_no_run);
+                $(".modal-body #input_edit_board_no").val(get_board_no);
+                $(".modal-body #input_edit_board_model").val(get_board_model);
+                $(".modal-body #input_edit_board_regis_date").val(get_board_regis_date);
+                $(".modal-body #input_edit_last_pm").val(get_board_last_pm);
+                $(".modal-body #input_edit_next_pm").val(get_board_next_pm);
+
+                //$(".modal-body #input_edit_life_time").val(get_board_life_time);
+                $(".modal-body #input_edit_life_time_condition").val(get_board_life_time_condition);
+                $(".modal-body #input_edit_board_stauts").val(get_board_status);
+                $(".modal-body #input_edit_board_op").val(get_board_oprate);
+            });
+
+            // btn submit modal edit board master
+            $('#btn_submit_edit_board').click(function () {
+                var edit_board_master = {
+                    "BI_BOARD_NO_RUN": $("#input_edit_board_no_run").val(),
+                    "BI_BOARD_NO": $("#input_edit_board_no").val(),
+                    "BI_BOARD_MODEL": $("#input_edit_board_model").val(),
+                    "LIFE_TIME": $("#input_edit_life_time_condition").val(),
+                    "BI_BOARD_REGISTRATION_DATE": $("#input_edit_board_regis_date").val(),
+                    "BI_BOARD_LAST_PM": $("#input_edit_last_pm").val(),
+                    "BI_BOARD_LIFE_TIME": $("#input_edit_life_time").val(),
+                    "BI_BOARD_STATUS": $("#input_edit_board_stauts option:selected").val(),
+                    "BI_BOARD_OPARATE": $("#input_edit_board_op option:selected").val()
+                }
+                console.log(edit_board_master);
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_edit_board_master",
+                    data: { edit_board_master: edit_board_master },
+                    datatype: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Update',
+                            text: 'Your board master has been update.'
+                            //    footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        $('#table_bi_board_master').DataTable().clear();
+                        $('#table_bi_board_master').DataTable().ajax.reload();
+                        $('#modal_edit_board_master').modal('hide');
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            });
+
+            function get_board_model() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_board_model_master",
+                    datatype: "json",
+                    success: function (data) {
+                        var $select = $('#fillter_board_model');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val + '>' + val + '</option>');
+                            });
+                        });
+
+                        //To Modal add board
+                        var $select = $('#input_add_board_model');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val + '>' + val + '</option>');
+                            });
+                        });
+
+                        //To Modal add board
+                        var $select = $('#input_edit_board_model');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val + '>' + val + '</option>');
+                            });
+                        });
+
+                    }
+                })
+            }
+
+            function get_board_status() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_board_status",
+                    datatype: "json",
+                    success: function (data) {
+                        var $select = $('#fillter_board_status');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.BI_BOARD_STATUS + '>' + val.BI_BOARD_STAUS_NAME + '</option>');
+                            });
+                        });
+
+                        //To Modal add board
+                        var $select = $('#input_add_board_stauts');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.BI_BOARD_STATUS + '>' + val.BI_BOARD_STAUS_NAME + '</option>');
+                            });
+                        });
+
+                        //To Modal edit board
+                        var $select = $('#input_edit_board_stauts');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.BI_BOARD_STATUS + '>' + val.BI_BOARD_STAUS_NAME + '</option>');
+                            });
+                        });
+
+                    }
+                })
+            }
+
+            // GET data into input modal
+            $(document).on("click", ".update_socket_board", function () {
+                var get_board_no = $(this).data('board_no');
+                var get_board_model = $(this).data('board_model');
+                console.log(get_board_no + ' ' + get_board_model);
+
+                //for (var x = 1; x <= 10; x++) {
+                //    $('#myTable').append("<tr>");
+
+                //    if (x == 1) {
+                //        $('#myTable').append("<td></td>");
+                //        for (var i = 1; i <= 10; i++) {
+                //            $('#myTable').append("<td style='background-color:blue;'>" + i + "</td>");
+                //        }
+                //        $('#myTable').append("</tr><tr>");
+                //    }
+                //    for (var y = 1; y <= 10; y++) {
+                //        //if (y == 1) {
+                //        //    $('#myTable').append("<td style='background-color:blue;'>" + y + "</td>");
+                //        //}
+                //    //    $('#myTable').append("<td'>" + x + "</td>");
+                //    }
+
+                //    $('#myTable').append("</tr>");
+                //}
+
+
+                for (var x = 1; x <= 9; x++) {
+                    $('#myTable').append("<tr>");
+
+                    if (x == 1) {
+                        $('#myTable').append("<td></td>");
+                        for (var i = 1; i <= 5; i++) {
+                            $('#myTable').append("<td style='background-color:blue;'>" + 'x: ' + " " + i + "</td>"); // Axis x
+                        }
+                        $('#myTable').append("</tr><tr>");
+                    }
+
+                    for (var y = 1; y <= 9; y++) {
+
+                        if (y == 1) {
+                            $('#myTable').append("<td style='background-color:red;'>" + 'y: ' + " " + x + "</td>"); // Axis y
+                        }
+                        //$('#myTable').append("<td'>" + x*y + "</td>");
+
+                    }
+                    $('#myTable').append("<td'>" + x + "</td>");
+
+
+                    $('#myTable').append("</tr>");
+                }
+
+                // loop from 0 index to max index
+                //for (var i = 1; i <= 10; i++) {
+                //    $('#myTable').append("<tr>");
+
+                //    if (i == 1) {
+
+                //        $('#myTable').append("<td style='background-color:blue;'>" + i + "</td>");
+                //    }
+                //    $('#myTable').append("</tr><tr>");
+
+                //    for (var y = 1; y <= 10; i++) {
+                //        if (y == 1) {
+                //            $('#myTable').append("<td style='background-color:blue;'>" + y + "</td>");
+                //        }
+                //        $('#myTable').append("<td'>" + x*y + "</td>");
+                //    }
+                //    $('#myTable').append("</tr>");
+                //}
+
+
+
+                //$.ajax({
+                //    type: "POST",
+                //    url: "./ajax_board_model_socket_qty",
+                //    data: '',
+                //    datatype: "json",
+                //    success: function (data) {
+                //        console.log(data);
+                //    },
+                //    error: function (request, status, error) {
+
+                //    }
+                //})
+
+            });
+
+            $('#fillter_board_no').on('change', function () {
+                var search = [];
+                $.each($('#fillter_board_no'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(0).search(search, true, false).draw();
+            });
+
+            $('#fillter_board_model').on('change', function () {
+                var search = [];
+                $.each($('#fillter_board_model option:selected'), function () {
+                    search.push($(this).val());
+                });
+                search = search.join('|');
+                table.column(1).search(search, true, false).draw();
+            });
+
+            $('#fillter_last_pm_date').on('change', function () {
+                var search = [];
+                $.each($('#fillter_last_pm_date'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(2).search(search, true, false).draw();
+            });
+
+            $('#fillter_next_pm_date').on('change', function () {
+                var search = [];
+                $.each($('#fillter_next_pm_date'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(3).search(search, true, false).draw();
+            });
+
+            $('#fillter_board_status').on('change', function () {
+                var search = [];
+                $.each($('#fillter_board_status option:selected'), function () {
+                    search.push($(this).text());
+                });
+                search = search.join('|');
+                table.column(6).search(search, true, false).draw();
+            });
+
+        });
+    </script>
+
+    <!-- Modal add board master -->
+    <div class="modal fade" id="modal_add_board_master" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel"><b>ADD BOARD MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Board No.</span>
+                                <input type="text" class="form-control" id="input_add_board_no">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Lifetime</span>
+                                <input type="text" class="form-control datepicker" id="input_add_life_time">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Model</label>
+                                <select class="form-select" id="input_add_board_model">
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Lifetime Condition</span>
+                                <input type="text" class="form-control" id="input_add_life_time_condition" value="100000">
+                                <span class="input-group-text">Hour</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Registration Date</span>
+                                <input type="text" class="form-control datepicker" id="input_add_board_regis_date" value="">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Status</label>
+                                <select class="form-select" id="input_add_board_stauts">
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Last PM Date</span>
+                                <input type="text" class="form-control datepicker" id="input_add_last_pm">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Operating</label>
+                                <select class="form-select" id="input_add_board_op">
+                                    <option selected>Choose...</option>
+                                    <option value="A">AVAILABLE</option>
+                                    <option value="W">WORKING</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btn_submit_add_board">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit board master -->
+    <div class="modal fade" id="modal_edit_board_master" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel"><b>EDIT BOARD MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <input type="hidden" class="" id="input_edit_board_no_run">
+                                <span class="input-group-text">Board No.</span>
+                                <input type="text" class="form-control" id="input_edit_board_no">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Lifetime</span>
+                                <input type="text" class="form-control datepicker" id="input_edit_life_time">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Model</label>
+                                <select class="form-select" id="input_edit_board_model">
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Lifetime Condition</span>
+                                <input type="text" class="form-control" id="input_edit_life_time_condition" value="10000">
+                                <span class="input-group-text">Hour</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Last PM Date</span>
+                                <input type="text" class="form-control datepicker" id="input_edit_last_pm">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Status</label>
+                                <select class="form-select" id="input_edit_board_stauts">
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3 col-xs-6">
+                                <span class="input-group-text">Next PM Date</span>
+                                <input type="text" class="form-control datepicker" id="input_edit_next_pm" disabled>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupSelect01">Board Operating</label>
+                                <select class="form-select" id="input_edit_board_op">
+                                    <option selected>Choose...</option>
+                                    <option value="A">AVALIABLE</option>
+                                    <option value="W">WORKING</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btn_submit_edit_board">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal update socket -->
+    <div class="modal fade" id="modal_update_socket_board_master" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel"><b>UPDATE SOCKET BOARD MASTER</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-6">
+                        <table id="myTable" class=" table text-center">
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect("~/Login/Login_axis");
+}

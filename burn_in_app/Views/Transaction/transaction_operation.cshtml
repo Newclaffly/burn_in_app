@@ -1,0 +1,581 @@
+﻿
+@{
+    ViewBag.Title = "transaction_operation";
+}
+@if (Session["GOALBAL_ID"] != null)
+{
+    <input type="hidden" value="@Session["GOALBAL_ID"].ToString()" id="temp_user" />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>PANEL FILTER BOARD MASTER</b></h5>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text">Select M/C</label>
+                                    <select class="form-select" id="fillter_selection_mc">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Lot EDP</span>
+                                    <input type="text" class="form-control" id="fillter_lot_edp" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Type Name</span>
+                                    <input type="text" class="form-control" id="fillter_type_name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelect01">BI Status</label>
+                                    <select class="form-select" id="fillter_bi_status">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Update by</span>
+                                    <input type="text" class="form-control" id="fillter_update_by" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="" id="table_history_footer ">
+            <div class="card mt-4">
+                <h5 class="card-header"><b>Operation transaction</b></h5>
+                <div class="card-body">
+                    <div class="div_table_history table-responsive">
+                        <table class="table table-bordered table-hover" id="table_bi_transaction">
+                            <thead>
+                                <tr>
+                                    <th scope="col">MC NO.</th>
+                                    <th scope="col">Lot EDP.</th>
+                                    <th scope="col">TYPE NAME.</th>
+                                    <th scope="col">BI prepare Date</th>
+                                    <th scope="col">Start BI Date</th>
+                                    <th scope="col">End BI Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Update by</th>
+                                    <th scope="col">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            get_mc_bi();
+            get_operation_bi_status();
+            create_table_bi_transaction();
+            var table = $('#table_bi_transaction').DataTable();
+
+            function create_table_bi_transaction() {
+                $('#table_bi_transaction').DataTable({
+                    "destroy": true,
+                    "searching": true,
+                    "lengthChange": false,
+                    "paging": false,
+                    "bInfo": false,
+                    "stateSave": false,
+                    "scrollY": '70vh',
+                    //"scrollX": true,
+                    "scrollCollapse": true,
+                    "ajax": {
+                        "type": "POST",
+                        "url": "./ajax_get_display_operation_transaction",
+                        "datatype": "json"
+                    },
+                    columnDefs: [
+                        { targets: [0, 1, 2, 3, 4, 5, 6, 7,8], className: 'text-center' },
+                    ],
+                    "columns": [
+                        { data: "MC_NUMBER", "name": "MC_NUMBER", "autoWidth": true },
+                        { data: "LOT_EDP", "name": "LOT_EDP", "autoWidth": true },
+                        { data: "TYPE_NAME", "name": "TYPE_NAME", "autoWidth": true },
+
+                        {
+                            data: "CREATE_DATE",
+                            "render": function (value) {
+                                if (value === null) return "";
+                                var date = eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                                return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+                            }
+                        },
+                        {
+                            data: "START_BI_DATE",
+                            "render": function (value) {
+                                if (value === null) return "";
+                                var date = eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                                return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+                            }
+                        },
+                        {
+                            data: "END_BI_DATE",
+                            "render": function (value) {
+                                if (value === null) return "";
+                                var date = eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                                return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+                            }
+                        },
+                        {
+                            data: 'BI_TRANSATUS_NAME', name: 'BI_TRANSATUS_NAME',
+                            render: function (data, type, row) {
+                                status = '';
+                                switch (data) {
+                                    case 'Waiting Start BI':
+                                        status = '<span class="badge bg-primary">' + data + '</span>';
+                                        break;
+                                    case 'During BI':
+                                        status = '<span class="badge bg-success">' + data + '</span>';
+                                        break;
+                                    case 'Finished BI':
+                                        status = '<span class="badge bg-warning">' + data + '</span>';
+                                        break;
+                                    case 'Completed BI':
+                                        status = '<span class="badge bg-success">' + data + '</span>';
+                                        break;
+                                }
+                                return status;
+                            }
+                        },
+                        { data: "CREATE_BY", "name": "CREATE_BY", "autoWidth": true },
+                        {
+                            "render": function (data, type, Me, meta) {
+                                return '<button type="button" class="btn btn-sm btn-success confirm_start_bi_transaction mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_confirm_start_bi" ' +
+                                    'data-mc_number ="' + Me.MC_NUMBER + '" data-lot_edp = "' + Me.LOT_EDP + '"  ' +
+                                    '> Start BI</button > ' +
+
+                                    '<button type="button" class="btn btn-sm btn-warning  detail_start_bi_transaction mr-2" style="color:white;" aria-hidden="true" " data-bs-toggle="modal" data-bs-target="#modal_detail_start_bi" ' +
+                                    'data-mc_number ="' + Me.MC_NUMBER + '" data-lot_edp = "' + Me.LOT_EDP + '"  ' +
+                                    '> Detail</button > ' +
+
+                                    '<button type="button" class="btn btn-sm btn-danger  end_bi_transaction mr-2" style="color:white;" aria-hidden="true" " ' +
+                                    'data-mc_number ="' + Me.MC_NUMBER + '" data-lot_edp = "' + Me.LOT_EDP + '"  ' +
+                                    '> End BI</button > ';
+                            }
+                        },
+                    ], // end columns
+                    "order": [[0, "asc"]]
+                });
+            }
+
+            // GET data into input modal
+            $(document).on("click", ".confirm_start_bi_transaction", function () {
+                $('#confirm_start_bi').attr("disabled", true);
+
+                $('#input_type_name').val('');
+                $('#input_program_name').val('');
+                $('#input_burn_in_time').val('');
+                $('#input_burn_in_temp').val('');
+                $('#input_type_name').keyup(function (e) {
+                    if (e.keyCode == 13) {
+                        //console.log('Here');
+
+                        render_data_mc_condition_db($('#input_type_name').val());
+                        $('#confirm_start_bi').attr("disabled", false);
+
+                    } else {
+
+                    }
+                });
+            });
+
+            function render_data_mc_condition_db(para) {
+                var temp = para;
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_mc_condition_db",
+                    data: { "type_name": temp },
+                    datatype: "json",
+                    success: function (data) {
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+
+                                $('#input_program_name').val(val.PROGRAM_NAME),
+                                    $('#input_burn_in_time').val(val.BURN_IN_TIME),
+                                    $('#input_burn_in_temp').val(val.BURN_IN_TEMP)
+                                //$('#input_burn_in_board_name').val(val.PACKAGE),
+                            });
+                        });
+                        //console.log(bi_board_status);
+
+                    },
+                    error: function (request, status, error) {
+
+                    }
+                })
+            }
+
+            $(document).on("click", ".detail_start_bi_transaction", function () {
+                var get_mc_number = $(this).data('mc_number');
+                var get_lot_edp = $(this).data('lot_edp');
+
+                $(".modal-body #mc_no").val(get_mc_number);
+                $(".modal-body #lot_edp").val(get_lot_edp);
+                //$('#table_bi_start_detail').DataTable().ajax.reload();
+
+                init_table_board_no_list(get_mc_number, get_lot_edp);
+
+            });
+
+            function init_table_board_no_list(para_mc_number, para_lot_edp) {
+                //console.log(para_mc_number);
+                //console.log(para_lot_edp);
+                $('#table_bi_start_detail').DataTable({
+                    "destroy": true,
+                    "searching": false,
+                    "paging": false,
+                    "bInfo": false,
+                    "stateSave": false,
+                    "scrollY": '30vh',
+                    "scrollCollapse": true,
+                    "responsive": true,
+                    "lengthChange": false,
+                    "ajax": {
+                        "type": "POST",
+                        "url": "./ajax_get_display_operation_transaction_by_board",
+                        "data": {
+                            'param_mc_name': para_mc_number,
+                            'param_lot_edp': para_lot_edp
+                        },
+                        "datatype": "json",
+                    },
+                    columnDefs: [
+                        {
+                            targets: [0, 1, 2], className: 'text-center', //Custom Condtion text-center
+                        },
+                    ],
+                    "columns": [ // Init render data
+                        { data: "BOARD_NO", "name": "BOARD_NO", "autoWidth": true },
+                        { data: "BI_BOARD_MODEL", "name": "BI_BOARD_MODEL", "autoWidth": true },
+                        { data: "BI_BOARD_STAUS_NAME", "name": "BI_BOARD_STAUS_NAME", "autoWidth": true },
+                    ], // end columns
+                });
+            }
+
+            // Confirm start BI
+            $(document).on("click", ".confirm_start_bi_transaction", function () {
+                var get_mc_number = $(this).data('mc_number');
+                var get_lot_edp = $(this).data('lot_edp');
+
+                $(".modal-body #input_lot_edp_start_bi").val(get_lot_edp);
+                $(".modal-body #input_mc_number_start_bi").val(get_mc_number);
+            });
+
+            $('#confirm_start_bi').click(function () {
+                var confirm_start_bi_data = {
+                    "LOT_EDP": $("#input_lot_edp_start_bi").val(),
+                    "MC_NUMBER": $("#input_mc_number_start_bi").val(),
+                    "TYPE_NAME": $("#input_type_name").val(),
+                }
+                console.log(confirm_start_bi_data);
+                $.ajax({
+                    type: "POST",
+                    url: "./update_operation_start_bi",
+                    data: { confirm_start_bi_data: confirm_start_bi_data },
+                    datatype: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Update',
+                            text: 'Your confirm start BI sucess.'
+                            //    footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        $('#table_bi_transaction').DataTable().clear();
+                        $('#table_bi_transaction').DataTable().ajax.reload();
+                        $('#modal_confirm_start_bi').modal('hide');
+                    },
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    }
+                })
+            });
+
+            //End BI
+            $(document).on("click", ".end_bi_transaction", function () {
+                var end_bi_data = {
+                    "LOT_EDP": $(this).data('lot_edp'),
+                    "MC_NUMBER": $(this).data('mc_number')
+                }
+                console.log(end_bi_data);
+                Swal.fire({
+                    title: 'Do you want to end BI operation?',
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'End BI',
+                    confirmButtonColor: '#d33',
+                    denyButtonText: `Don't save`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "./update_operation_end_bi",
+                            data: { end_bi_data: end_bi_data },
+                            datatype: "json",
+                            success: function (data) {
+                                Swal.fire('End Bi completed!', '', 'success')
+                                $('#table_bi_transaction').DataTable().clear();
+                                $('#table_bi_transaction').DataTable().ajax.reload();
+                                $('#modal_confirm_start_bi').modal('hide');
+                            },
+                            error: function (request, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!',
+                                    footer: '<a href="">Why do I have this issue?</a>'
+                                })
+                            }
+                        })
+
+                        $.ajax({
+                            type: "POST",
+                            url: "./update_life_time_board_usage_end_bi",
+                            data: { end_bi_data: end_bi_data },
+                            datatype: "json",
+                            success: function (data) {
+                                //Swal.fire('End Bi completed!', '', 'success')
+                                //$('#table_bi_transaction').DataTable().clear();
+                                //$('#table_bi_transaction').DataTable().ajax.reload();
+                                //    $('#modal_confirm_start_bi').modal('hide');
+                            },
+                            error: function (request, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!',
+                                    footer: '<a href="">Why do I have this issue?</a>'
+                                })
+                            }
+                        })
+
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                    }
+                })
+
+            });
+
+            function get_mc_bi() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_mc_mst",
+                    datatype: "json",
+                    success: function (data) {
+                        var $select = $('#fillter_selection_mc');
+                        $.each(data, function (i) {
+                            $select.prepend('<option value="">Choose...</option>');
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.BI_MC_NO + '>' + val.BI_MC_NO + '</option>');
+                            });
+                        });
+                    }
+                })
+            }
+
+            function get_operation_bi_status() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_bi_operation_status",
+                    datatype: "json",
+                    success: function (data) {
+                        var $select = $('#fillter_bi_status');
+                        $.each(data, function (i) {
+                            $select.prepend('<option value="">Choose...</option>');
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.BI_TRANSATUS_NAME + '>' + val.BI_TRANSATUS_NAME + '</option>');
+                            });
+                        });
+                    }
+                })
+            }
+
+            $('#fillter_selection_mc').on('change', function () {
+                var search = [];
+                $.each($('#fillter_selection_mc option:selected'), function () {
+                    search.push($(this).val());
+                });
+                search = search.join('|');
+                table.column(0).search(search, true, false).draw();
+            });
+
+            $('#fillter_lot_edp').on('change', function () {
+                var search = [];
+                $.each($('#fillter_lot_edp'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(1).search(search, true, false).draw();
+            });
+
+            $('#fillter_type_name').on('change', function () {
+                var search = [];
+                $.each($('#fillter_type_name'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(2).search(search, true, false).draw();
+            });
+
+            $('#fillter_bi_status').on('change', function () {
+                var search = [];
+                $.each($('#fillter_bi_status option:selected'), function () {
+                    search.push($(this).text());
+                });
+
+                search = search.join('|');
+                table.column(6).search(search, true, false).draw();
+            });
+
+            $('#fillter_update_by').on('change', function () {
+                var search = [];
+                $.each($('#fillter_update_by'), function () {
+                    search.push($(this).val());
+                });
+
+                search = search.join('|');
+                table.column(7).search(search, true, false).draw();
+            });
+
+            $('#modal_detail_start_bi').on('shown.bs.modal', function (e) {
+                $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+            });
+
+        });
+    </script>
+    <!-- Modal confirm start BI -->
+    <div class="modal fade" id="modal_confirm_start_bi" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">Modal confirm with M/C</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3 mt-2">
+                                <span class="input-group-text">Type Name</span>
+                                <!-- Hidden value -->
+                                <input type="hidden" class="form-control" id="input_lot_edp_start_bi">
+                                <input type="hidden" class="form-control" id="input_mc_number_start_bi">
+
+                                <input type="text" class="form-control" id="input_type_name" aria-describedby="">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3 mt-2">
+                                <span class="input-group-text">Program Name</span>
+                                <input type="text" class="form-control" id="input_program_name" aria-describedby="" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3 mt-2">
+                                <span class="input-group-text">Burn-in Time</span>
+                                <input type="text" class="form-control" id="input_burn_in_time" aria-describedby="" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3 mt-2">
+                                <span class="input-group-text">Burn-in Temp</span>
+                                <input type="text" class="form-control" id="input_burn_in_temp" aria-describedby="" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-md btn-success" id="confirm_start_bi">Start BI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detail start BI -->
+    <div class="modal fade" id="modal_detail_start_bi" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">Modal detail start BI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="table-responsive border-0">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">M/C No.</span>
+                                        <input type="text" class="form-control" id="mc_no" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">Lot EDP</span>
+                                        <input type="text" class="form-control" id="lot_edp" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered mb-0 table-custom table-hover table-striped" id="table_bi_start_detail">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Board No.</th>
+                                                    <th scope="col">Board Model</th>
+                                                    <th scope="col">Board Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect("~/Login/Login_axis");
+}

@@ -1,0 +1,958 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BURN_INModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BI_BOARD_MODEL_PRODUCT_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_MODEL_NO" />
+          </Key>
+          <Property Name="BI_BOARD_MODEL_NO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BI_BOARD_MODEL" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_COORDINATE_X" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_COORDINATE_Y" Type="varchar" MaxLength="50" />
+          <Property Name="MAX_LIFE_TIME" Type="varchar" MaxLength="50" />
+          <Property Name="CYCLE_PERIOD_DAY" Type="varchar" MaxLength="50" />
+          <Property Name="CYCLE_PERIOD_TIME" Type="varchar" MaxLength="50" />
+          <Property Name="PRODUCT_TYPE" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_PM_TRANS">
+          <Key>
+            <PropertyRef Name="BI_BOARD_TRANS_PM_ID" />
+          </Key>
+          <Property Name="BI_BOARD_TRANS_PM_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="CYCLE_FLAG" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_NO" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_LAST_PM" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_NEXT_PM" Type="varchar" MaxLength="50" />
+          <Property Name="EMP_UPDATE" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_SOCKET_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_NO" />
+            <PropertyRef Name="SOCKET_NO" />
+          </Key>
+          <Property Name="BI_BOARD_NO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SOCKET_NO" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="SOCKET_STATUS" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_SOCKET_STATUS_MST">
+          <Key>
+            <PropertyRef Name="SOCKET_STATUS" />
+          </Key>
+          <Property Name="SOCKET_STATUS" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SOCKET_STATUS_NAME" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_STATUS_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_STATUS" />
+          </Key>
+          <Property Name="BI_BOARD_STATUS" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BI_BOARD_STAUS_NAME" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_TRANS">
+          <Key>
+            <PropertyRef Name="BI_BOARD_TRANS_ID" />
+          </Key>
+          <Property Name="BI_BOARD_TRANS_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="HIST_CODE" Type="varchar" MaxLength="50" />
+          <Property Name="BI_MC_NO" Type="varchar" MaxLength="50" />
+          <Property Name="BI_RECIPE" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_NO" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_BORD_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_NO_RUN" />
+          </Key>
+          <Property Name="BI_BOARD_NO_RUN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BI_BOARD_NO" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_MODEL" Type="varchar" MaxLength="50" />
+          <Property Name="LIFE_TIME" Type="varchar" MaxLength="50" />
+          <Property Name="LIFE_TIME_REAMIN" Type="varchar" MaxLength="50" />
+          <Property Name="CYCLE_TIME" Type="datetime" />
+          <Property Name="BI_BOARD_REGISTRATION_DATE" Type="datetime" />
+          <Property Name="BI_BOARD_LAST_PM" Type="datetime" />
+          <Property Name="BI_BOARD_NEXT_PM" Type="datetime" />
+          <Property Name="BI_BOARD_LIFE_TIME" Type="datetime" />
+          <Property Name="BI_BOARD_LIFE_TIME_DAY" Type="int" />
+          <Property Name="BI_BOARD_STATUS" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_OPARATE" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_HIST_MST">
+          <Key>
+            <PropertyRef Name="HIST_CODE" />
+          </Key>
+          <Property Name="HIST_CODE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="HIST_CODE_NAME" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_MC_CONDITION_DB_MST">
+          <Key>
+            <PropertyRef Name="CODITION_NO" />
+          </Key>
+          <Property Name="CODITION_NO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BI_MC" Type="varchar" MaxLength="50" />
+          <Property Name="TYPE_NAME" Type="varchar" MaxLength="50" />
+          <Property Name="PACKAGE" Type="varchar" MaxLength="50" />
+          <Property Name="PROGRAM_NAME" Type="varchar" MaxLength="50" />
+          <Property Name="BURN_IN_TIME" Type="varchar" MaxLength="50" />
+          <Property Name="BURN_IN_TEMP" Type="nvarchar" MaxLength="50" />
+          <Property Name="BURN_IN_BOARD_NAME" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_MC_MODEL_MST">
+          <Key>
+            <PropertyRef Name="BI_MC_MODEL_RUN_NO" />
+          </Key>
+          <Property Name="BI_MC_MODEL_RUN_NO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BI_MC_MODEL" Type="varchar" MaxLength="50" />
+          <Property Name="BI_MC_CAPACITY_BOARD" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="UPDATE_DATE" Type="datetime" />
+          <Property Name="UPDATE_BY" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_MC_MST">
+          <Key>
+            <PropertyRef Name="BI_MC_NO_RUN" />
+          </Key>
+          <Property Name="BI_MC_NO_RUN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BI_MC_NO" Type="varchar" MaxLength="50" />
+          <Property Name="BI_MC_MODEL" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="UPDATE_DATE" Type="datetime" />
+          <Property Name="UPDATE_BY" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_MC_RECIPE_MST">
+          <Key>
+            <PropertyRef Name="PRODUCT_TYPE" />
+          </Key>
+          <Property Name="PRODUCT_TYPE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TIME" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_MC_STATUS">
+          <Key>
+            <PropertyRef Name="BI_MC_NO" />
+          </Key>
+          <Property Name="BI_MC_NO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BI_CHAMBER_NO" Type="varchar" MaxLength="50" />
+          <Property Name="BI_MODEL" Type="varchar" MaxLength="50" />
+          <Property Name="BI_SLOT_NO" Type="varchar" MaxLength="50" />
+          <Property Name="BI_SLOT_STATUS" Type="varchar" MaxLength="50" />
+          <Property Name="BI_BOARD_NO" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_OPERATION_TRANSACTION">
+          <Key>
+            <PropertyRef Name="TRANSACTION_ID" />
+          </Key>
+          <Property Name="TRANSACTION_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LOT_EDP" Type="varchar" MaxLength="50" />
+          <Property Name="MC_NUMBER" Type="varchar" MaxLength="50" />
+          <Property Name="BOARD_NO" Type="varchar" MaxLength="50" />
+          <Property Name="TYPE_NAME" Type="varchar" MaxLength="50" />
+          <Property Name="STATUS_BI" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="START_BI_DATE" Type="datetime" />
+          <Property Name="END_BI_DATE" Type="datetime" />
+          <Property Name="CREATE_BY" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_PRODUCT_TYPE_LIST_MST">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRODUCT_TYPE_AXIS" Type="varchar(max)" />
+          <Property Name="PRODUCT_TYPE_CONVERT" Type="varchar(max)" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="UPDATE_DATE" Type="datetime" />
+          <Property Name="UPDATE_BY" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BI_TRANSACTION_STATUS_MST">
+          <Key>
+            <PropertyRef Name="BI_TRAN_STATUS_ID" />
+          </Key>
+          <Property Name="BI_TRANSACTION_STATUS" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BI_TRAN_STATUS_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BI_TRANSATUS_NAME" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BURN_IN.dbo.sdt_member' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="sdt_member">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="NameEng" Type="nvarchar" MaxLength="20" />
+          <Property Name="SurnameEng" Type="nvarchar" MaxLength="30" />
+          <Property Name="NameThai" Type="nvarchar" MaxLength="20" />
+          <Property Name="SurnameThai" Type="nvarchar" MaxLength="30" />
+          <Property Name="Organize" Type="nvarchar" MaxLength="12" />
+          <Property Name="Position" Type="nvarchar" MaxLength="30" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="GlobalID" Type="nchar" MaxLength="10" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="GenerateDate" Type="datetime" />
+          <Property Name="Level" Type="int" />
+          <Property Name="Process" Type="nvarchar" MaxLength="4" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="2" />
+        </EntityType>
+        <Function Name="sp_add_board_master" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BI_BOARD_NO" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_MODEL" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_REGISTRATION_DATE" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_LAST_PM" Type="varchar(max)" Mode="In" />
+          <Parameter Name="LIFE_TIME" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_STATUS" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_OPARATE" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_add_board_model_master" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BI_BOARD_MODEL" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PRODUCT_TYPE" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_COORDINATE_X" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_BOARD_COORDINATE_Y" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_add_mc_master" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BI_MC_NO" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_MC_MODEL" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_add_mc_model_master" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BI_MC_MODEL" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BI_MC_CAPACITY_BOARD" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_display_maintain_board_master" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_display_maintain_board_socket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_display_suggest_board_information" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_display_transaction_operation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_login_axis" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_suggest_board_information" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_update_operation_bi" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LOT_EDP" Type="varchar" Mode="In" />
+          <Parameter Name="MC_NUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="TYPE_NAME" Type="varchar" Mode="In" />
+          <Parameter Name="FLAG_TRAN" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_update_product_type_list_mst" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="BURN_INModelStoreContainer">
+          <EntitySet Name="BI_BOARD_MODEL_PRODUCT_MST" EntityType="Self.BI_BOARD_MODEL_PRODUCT_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_BOARD_PM_TRANS" EntityType="Self.BI_BOARD_PM_TRANS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_BOARD_SOCKET_MST" EntityType="Self.BI_BOARD_SOCKET_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_BOARD_SOCKET_STATUS_MST" EntityType="Self.BI_BOARD_SOCKET_STATUS_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_BOARD_STATUS_MST" EntityType="Self.BI_BOARD_STATUS_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_BOARD_TRANS" EntityType="Self.BI_BOARD_TRANS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_BORD_MST" EntityType="Self.BI_BORD_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_HIST_MST" EntityType="Self.BI_HIST_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_MC_CONDITION_DB_MST" EntityType="Self.BI_MC_CONDITION_DB_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_MC_MODEL_MST" EntityType="Self.BI_MC_MODEL_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_MC_MST" EntityType="Self.BI_MC_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_MC_RECIPE_MST" EntityType="Self.BI_MC_RECIPE_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_MC_STATUS" EntityType="Self.BI_MC_STATUS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_OPERATION_TRANSACTION" EntityType="Self.BI_OPERATION_TRANSACTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_PRODUCT_TYPE_LIST_MST" EntityType="Self.BI_PRODUCT_TYPE_LIST_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BI_TRANSACTION_STATUS_MST" EntityType="Self.BI_TRANSACTION_STATUS_MST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sdt_member" EntityType="Self.sdt_member" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [sdt_member].[ID] AS [ID], 
+    [sdt_member].[NameEng] AS [NameEng], 
+    [sdt_member].[SurnameEng] AS [SurnameEng], 
+    [sdt_member].[NameThai] AS [NameThai], 
+    [sdt_member].[SurnameThai] AS [SurnameThai], 
+    [sdt_member].[Organize] AS [Organize], 
+    [sdt_member].[Position] AS [Position], 
+    [sdt_member].[Email] AS [Email], 
+    [sdt_member].[GlobalID] AS [GlobalID], 
+    [sdt_member].[UpdateDate] AS [UpdateDate], 
+    [sdt_member].[GenerateDate] AS [GenerateDate], 
+    [sdt_member].[Level] AS [Level], 
+    [sdt_member].[Process] AS [Process], 
+    [sdt_member].[Password] AS [Password], 
+    [sdt_member].[Status] AS [Status]
+    FROM [dbo].[sdt_member] AS [sdt_member]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BURN_INModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BURN_INEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="sp_disply_maintain_board_master" ReturnType="Collection(BURN_INModel.sp_disply_maintain_board_master_Result)" />
+          <FunctionImport Name="sp_suggest_board_information" ReturnType="Collection(BURN_INModel.sp_suggest_board_information_Result)" />
+          <FunctionImport Name="sp_display_maintain_board_master" ReturnType="Collection(BURN_INModel.sp_display_maintain_board_master_Result)" />
+          <FunctionImport Name="sp_display_maintain_board_socket" ReturnType="Collection(BURN_INModel.sp_display_maintain_board_socket_Result)" />
+          <FunctionImport Name="sp_display_suggest_board_information" ReturnType="Collection(BURN_INModel.sp_display_suggest_board_information_Result)" />
+          <FunctionImport Name="sp_add_board_model_master">
+            <Parameter Name="BI_BOARD_MODEL" Mode="In" Type="String" />
+            <Parameter Name="PRODUCT_TYPE" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_COORDINATE_X" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_COORDINATE_Y" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_add_board_master">
+            <Parameter Name="BI_BOARD_NO" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_MODEL" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_REGISTRATION_DATE" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_LAST_PM" Mode="In" Type="String" />
+            <Parameter Name="LIFE_TIME" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_STATUS" Mode="In" Type="String" />
+            <Parameter Name="BI_BOARD_OPARATE" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_add_mc_master">
+            <Parameter Name="BI_MC_NO" Mode="In" Type="String" />
+            <Parameter Name="BI_MC_MODEL" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_add_mc_model_master">
+            <Parameter Name="BI_MC_MODEL" Mode="In" Type="String" />
+            <Parameter Name="BI_MC_CAPACITY_BOARD" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_update_product_type_list_mst" />
+          <FunctionImport Name="sp_update_lifetime_board_mst" />
+          <FunctionImport Name="sp_display_transaction_operation" ReturnType="Collection(BURN_INModel.sp_display_transaction_operation_Result)" />
+          <EntitySet Name="BI_BOARD_MODEL_PRODUCT_MST" EntityType="BURN_INModel.BI_BOARD_MODEL_PRODUCT_MST" />
+          <EntitySet Name="BI_BOARD_PM_TRANS" EntityType="BURN_INModel.BI_BOARD_PM_TRANS" />
+          <EntitySet Name="BI_BOARD_SOCKET_MST" EntityType="BURN_INModel.BI_BOARD_SOCKET_MST" />
+          <EntitySet Name="BI_BOARD_SOCKET_STATUS_MST" EntityType="BURN_INModel.BI_BOARD_SOCKET_STATUS_MST" />
+          <EntitySet Name="BI_BOARD_STATUS_MST" EntityType="BURN_INModel.BI_BOARD_STATUS_MST" />
+          <EntitySet Name="BI_BOARD_TRANS" EntityType="BURN_INModel.BI_BOARD_TRANS" />
+          <EntitySet Name="BI_BORD_MST" EntityType="BURN_INModel.BI_BORD_MST" />
+          <EntitySet Name="BI_HIST_MST" EntityType="BURN_INModel.BI_HIST_MST" />
+          <EntitySet Name="BI_MC_CONDITION_DB_MST" EntityType="BURN_INModel.BI_MC_CONDITION_DB_MST" />
+          <EntitySet Name="BI_MC_MODEL_MST" EntityType="BURN_INModel.BI_MC_MODEL_MST" />
+          <EntitySet Name="BI_MC_MST" EntityType="BURN_INModel.BI_MC_MST" />
+          <EntitySet Name="BI_MC_RECIPE_MST" EntityType="BURN_INModel.BI_MC_RECIPE_MST" />
+          <EntitySet Name="BI_MC_STATUS" EntityType="BURN_INModel.BI_MC_STATUS" />
+          <EntitySet Name="BI_OPERATION_TRANSACTION" EntityType="BURN_INModel.BI_OPERATION_TRANSACTION" />
+          <EntitySet Name="BI_PRODUCT_TYPE_LIST_MST" EntityType="BURN_INModel.BI_PRODUCT_TYPE_LIST_MST" />
+          <EntitySet Name="BI_TRANSACTION_STATUS_MST" EntityType="BURN_INModel.BI_TRANSACTION_STATUS_MST" />
+          <FunctionImport Name="sp_update_operation_bi">
+            <Parameter Name="LOT_EDP" Mode="In" Type="String" />
+            <Parameter Name="MC_NUMBER" Mode="In" Type="String" />
+            <Parameter Name="TYPE_NAME" Mode="In" Type="String" />
+            <Parameter Name="FLAG_TRAN" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="sdt_member" EntityType="BURN_INModel.sdt_member" />
+          <FunctionImport Name="sp_login_axis" ReturnType="Collection(BURN_INModel.sp_login_axis_Result)" />
+          </EntityContainer>
+        <ComplexType Name="sp_disply_maintain_board_master_Result">
+          <Property Type="String" Name="BI_BOARD_NO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_MODEL" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="LIFE_TIME" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="CYCLE_TIME" Nullable="true" Precision="23" />
+          <Property Type="String" Name="BI_BOARD_STAUS_NAME" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_OPARATE" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_suggest_board_information_Result">
+          <Property Type="String" Name="LOT_NO" Nullable="false" MaxLength="14" />
+          <Property Type="DateTime" Name="CREATE_DATE" Nullable="false" />
+          <Property Type="DateTime" Name="UPDATE_DATE" Nullable="false" />
+          <Property Type="String" Name="UPDATE_EMP" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="MAC_ID" Nullable="true" MaxLength="28" />
+          <Property Type="String" Name="TYPE_CD" Nullable="false" MaxLength="22" />
+          <Property Type="String" Name="LOC_NAME" Nullable="false" MaxLength="7" />
+          <Property Type="String" Name="OPE_NAME" Nullable="false" MaxLength="8" />
+          <Property Type="Decimal" Name="INPUT" Nullable="false" Precision="9" Scale="0" />
+          <Property Type="Decimal" Name="LOC_QTY" Nullable="false" Precision="9" Scale="0" />
+          <Property Type="String" Name="MARK_LOT_NO" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="HIN_CD" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="sp_display_maintain_board_master_Result">
+          <Property Type="String" Name="BI_BOARD_NO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_MODEL" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LIFE_TIME" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="CYCLE_TIME" Nullable="true" Precision="23" />
+          <Property Type="String" Name="BI_BOARD_STAUS_NAME" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_OPARATE" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="BI_BOARD_REGISTRATION_DATE" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="BI_BOARD_LAST_PM" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="BI_BOARD_LIFE_TIME" Nullable="true" Precision="23" />
+          <Property Type="String" Name="BI_BOARD_STATUS" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="BI_BOARD_NO_RUN" Nullable="false" />
+          <Property Type="DateTime" Name="BI_BOARD_NEXT_PM" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="BI_BOARD_LIFE_TIME_DAY" Nullable="true" />
+          <Property Type="Double" Name="LIFE_TIME_CURRENT" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_display_maintain_board_socket_Result">
+          <Property Type="String" Name="BI_BOARD_NO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_MODEL" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="LIFE_TIME" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="CYCLE_TIME" Nullable="true" Precision="23" />
+          <Property Type="String" Name="BI_BOARD_STAUS_NAME" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SOCKET_NO" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="SOCKET_STATUS_NAME" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_OPARATE" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SOCKET_STATUS" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_display_suggest_board_information_Result">
+          <Property Type="String" Name="LOT_NO" Nullable="false" MaxLength="14" />
+          <Property Type="DateTime" Name="CREATE_DATE" Nullable="false" />
+          <Property Type="String" Name="MAC_ID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="TYPE_CD" Nullable="false" MaxLength="22" />
+          <Property Type="String" Name="LOC_NAME" Nullable="false" MaxLength="7" />
+          <Property Type="String" Name="OPE_NAME" Nullable="false" MaxLength="8" />
+          <Property Type="Decimal" Name="QUANTITY" Nullable="false" Precision="9" Scale="0" />
+          <Property Type="Decimal" Name="LOC_QTY" Nullable="false" Precision="9" Scale="0" />
+          <Property Type="String" Name="MARK_LOT_NO" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="HIN_CD" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="MAN_NAME" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="BOARD_NO" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="BOARD_MODEL" Nullable="false" MaxLength="3" />
+        </ComplexType>
+        <ComplexType Name="sp_display_transaction_operation_Result">
+          <Property Type="Int32" Name="TRANSACTION_ID" Nullable="false" />
+          <Property Type="String" Name="LOT_EDP" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MC_NUMBER" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BOARD_NO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_MODEL" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TYPE_NAME" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_STATUS" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_BOARD_STAUS_NAME" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="STATUS_BI" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="CREATE_DATE" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="START_BI_DATE" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="END_BI_DATE" Nullable="true" Precision="23" />
+          <Property Type="String" Name="CREATE_BY" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BI_TRANSATUS_NAME" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="BI_BOARD_MODEL_PRODUCT_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_MODEL_NO" />
+          </Key>
+          <Property Name="BI_BOARD_MODEL_NO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BI_BOARD_MODEL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_COORDINATE_X" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_COORDINATE_Y" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MAX_LIFE_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CYCLE_PERIOD_DAY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CYCLE_PERIOD_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PRODUCT_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_PM_TRANS">
+          <Key>
+            <PropertyRef Name="BI_BOARD_TRANS_PM_ID" />
+          </Key>
+          <Property Name="BI_BOARD_TRANS_PM_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="CYCLE_FLAG" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_LAST_PM" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_NEXT_PM" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EMP_UPDATE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_SOCKET_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_NO" />
+            <PropertyRef Name="SOCKET_NO" />
+          </Key>
+          <Property Name="BI_BOARD_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SOCKET_NO" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SOCKET_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_SOCKET_STATUS_MST">
+          <Key>
+            <PropertyRef Name="SOCKET_STATUS" />
+          </Key>
+          <Property Name="SOCKET_STATUS" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SOCKET_STATUS_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_STATUS_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_STATUS" />
+          </Key>
+          <Property Name="BI_BOARD_STATUS" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_STAUS_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_BOARD_TRANS">
+          <Key>
+            <PropertyRef Name="BI_BOARD_TRANS_ID" />
+          </Key>
+          <Property Name="BI_BOARD_TRANS_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="HIST_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_MC_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_RECIPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_BORD_MST">
+          <Key>
+            <PropertyRef Name="BI_BOARD_NO_RUN" />
+          </Key>
+          <Property Name="BI_BOARD_NO_RUN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BI_BOARD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_MODEL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LIFE_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LIFE_TIME_REAMIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CYCLE_TIME" Type="DateTime" Precision="3" />
+          <Property Name="BI_BOARD_REGISTRATION_DATE" Type="DateTime" Precision="3" />
+          <Property Name="BI_BOARD_LAST_PM" Type="DateTime" Precision="3" />
+          <Property Name="BI_BOARD_NEXT_PM" Type="DateTime" Precision="3" />
+          <Property Name="BI_BOARD_LIFE_TIME" Type="DateTime" Precision="3" />
+          <Property Name="BI_BOARD_LIFE_TIME_DAY" Type="Int32" />
+          <Property Name="BI_BOARD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_OPARATE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_HIST_MST">
+          <Key>
+            <PropertyRef Name="HIST_CODE" />
+          </Key>
+          <Property Name="HIST_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HIST_CODE_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_MC_CONDITION_DB_MST">
+          <Key>
+            <PropertyRef Name="CODITION_NO" />
+          </Key>
+          <Property Name="CODITION_NO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BI_MC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TYPE_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PACKAGE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PROGRAM_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BURN_IN_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BURN_IN_TEMP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BURN_IN_BOARD_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_MC_MODEL_MST">
+          <Key>
+            <PropertyRef Name="BI_MC_MODEL_RUN_NO" />
+          </Key>
+          <Property Name="BI_MC_MODEL_RUN_NO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BI_MC_MODEL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_MC_CAPACITY_BOARD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATE_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_MC_MST">
+          <Key>
+            <PropertyRef Name="BI_MC_NO_RUN" />
+          </Key>
+          <Property Name="BI_MC_NO_RUN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BI_MC_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_MC_MODEL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATE_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_MC_RECIPE_MST">
+          <Key>
+            <PropertyRef Name="PRODUCT_TYPE" />
+          </Key>
+          <Property Name="PRODUCT_TYPE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_MC_STATUS">
+          <Key>
+            <PropertyRef Name="BI_MC_NO" />
+          </Key>
+          <Property Name="BI_MC_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_CHAMBER_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_MODEL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_SLOT_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_SLOT_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_BOARD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_OPERATION_TRANSACTION">
+          <Key>
+            <PropertyRef Name="TRANSACTION_ID" />
+          </Key>
+          <Property Name="TRANSACTION_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LOT_EDP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MC_NUMBER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BOARD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TYPE_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STATUS_BI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="START_BI_DATE" Type="DateTime" Precision="3" />
+          <Property Name="END_BI_DATE" Type="DateTime" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_PRODUCT_TYPE_LIST_MST">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRODUCT_TYPE_AXIS" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PRODUCT_TYPE_CONVERT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATE_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BI_TRANSACTION_STATUS_MST">
+          <Key>
+            <PropertyRef Name="BI_TRAN_STATUS_ID" />
+          </Key>
+          <Property Name="BI_TRANSACTION_STATUS" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BI_TRAN_STATUS_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BI_TRANSATUS_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="sdt_member">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="NameEng" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SurnameEng" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="NameThai" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SurnameThai" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Organize" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GlobalID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="GenerateDate" Type="DateTime" Precision="3" />
+          <Property Name="Level" Type="Int32" />
+          <Property Name="Process" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="sp_login_axis_Result">
+          <Property Type="String" Name="EMP_ID" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="PASSWORD" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="EMP_NAME" Nullable="false" MaxLength="160" />
+          <Property Type="String" Name="EMP_LINE_KB" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="DEPARTMENT_CODE" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BURN_INModelStoreContainer" CdmEntityContainer="BURN_INEntities">
+          <FunctionImportMapping FunctionImportName="sp_suggest_board_information" FunctionName="BURN_INModel.Store.sp_suggest_board_information">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BURN_INModel.sp_suggest_board_information_Result">
+                <ScalarProperty Name="LOT_NO" ColumnName="LOT_NO" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+                <ScalarProperty Name="UPDATE_EMP" ColumnName="UPDATE_EMP" />
+                <ScalarProperty Name="MAC_ID" ColumnName="MAC_ID" />
+                <ScalarProperty Name="TYPE_CD" ColumnName="TYPE_CD" />
+                <ScalarProperty Name="LOC_NAME" ColumnName="LOC_NAME" />
+                <ScalarProperty Name="OPE_NAME" ColumnName="OPE_NAME" />
+                <ScalarProperty Name="INPUT" ColumnName="INPUT" />
+                <ScalarProperty Name="LOC_QTY" ColumnName="LOC_QTY" />
+                <ScalarProperty Name="MARK_LOT_NO" ColumnName="MARK_LOT_NO" />
+                <ScalarProperty Name="HIN_CD" ColumnName="HIN_CD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_display_maintain_board_master" FunctionName="BURN_INModel.Store.sp_display_maintain_board_master">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BURN_INModel.sp_display_maintain_board_master_Result">
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+                <ScalarProperty Name="BI_BOARD_MODEL" ColumnName="BI_BOARD_MODEL" />
+                <ScalarProperty Name="LIFE_TIME" ColumnName="LIFE_TIME" />
+                <ScalarProperty Name="CYCLE_TIME" ColumnName="CYCLE_TIME" />
+                <ScalarProperty Name="BI_BOARD_STAUS_NAME" ColumnName="BI_BOARD_STAUS_NAME" />
+                <ScalarProperty Name="BI_BOARD_OPARATE" ColumnName="BI_BOARD_OPARATE" />
+                <ScalarProperty Name="BI_BOARD_REGISTRATION_DATE" ColumnName="BI_BOARD_REGISTRATION_DATE" />
+                <ScalarProperty Name="BI_BOARD_LAST_PM" ColumnName="BI_BOARD_LAST_PM" />
+                <ScalarProperty Name="BI_BOARD_LIFE_TIME" ColumnName="BI_BOARD_LIFE_TIME" />
+                <ScalarProperty Name="BI_BOARD_STATUS" ColumnName="BI_BOARD_STATUS" />
+                <ScalarProperty Name="BI_BOARD_NO_RUN" ColumnName="BI_BOARD_NO_RUN" />
+                <ScalarProperty Name="BI_BOARD_NEXT_PM" ColumnName="BI_BOARD_NEXT_PM" />
+                <ScalarProperty Name="BI_BOARD_LIFE_TIME_DAY" ColumnName="BI_BOARD_LIFE_TIME_DAY" />
+                <ScalarProperty Name="LIFE_TIME_CURRENT" ColumnName="LIFE_TIME_CURRENT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_display_maintain_board_socket" FunctionName="BURN_INModel.Store.sp_display_maintain_board_socket">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BURN_INModel.sp_display_maintain_board_socket_Result">
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+                <ScalarProperty Name="BI_BOARD_MODEL" ColumnName="BI_BOARD_MODEL" />
+                <ScalarProperty Name="LIFE_TIME" ColumnName="LIFE_TIME" />
+                <ScalarProperty Name="CYCLE_TIME" ColumnName="CYCLE_TIME" />
+                <ScalarProperty Name="BI_BOARD_STAUS_NAME" ColumnName="BI_BOARD_STAUS_NAME" />
+                <ScalarProperty Name="SOCKET_NO" ColumnName="SOCKET_NO" />
+                <ScalarProperty Name="SOCKET_STATUS_NAME" ColumnName="SOCKET_STATUS_NAME" />
+                <ScalarProperty Name="BI_BOARD_OPARATE" ColumnName="BI_BOARD_OPARATE" />
+                <ScalarProperty Name="SOCKET_STATUS" ColumnName="SOCKET_STATUS" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_display_suggest_board_information" FunctionName="BURN_INModel.Store.sp_display_suggest_board_information">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BURN_INModel.sp_display_suggest_board_information_Result">
+                <ScalarProperty Name="LOT_NO" ColumnName="LOT_NO" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="MAC_ID" ColumnName="MAC_ID" />
+                <ScalarProperty Name="TYPE_CD" ColumnName="TYPE_CD" />
+                <ScalarProperty Name="LOC_NAME" ColumnName="LOC_NAME" />
+                <ScalarProperty Name="OPE_NAME" ColumnName="OPE_NAME" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="LOC_QTY" ColumnName="LOC_QTY" />
+                <ScalarProperty Name="MARK_LOT_NO" ColumnName="MARK_LOT_NO" />
+                <ScalarProperty Name="HIN_CD" ColumnName="HIN_CD" />
+                <ScalarProperty Name="MAN_NAME" ColumnName="MAN_NAME" />
+                <ScalarProperty Name="BOARD_NO" ColumnName="BOARD_NO" />
+                <ScalarProperty Name="BOARD_MODEL" ColumnName="BOARD_MODEL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_add_board_model_master" FunctionName="BURN_INModel.Store.sp_add_board_model_master" />
+          <FunctionImportMapping FunctionImportName="sp_add_board_master" FunctionName="BURN_INModel.Store.sp_add_board_master" />
+          <FunctionImportMapping FunctionImportName="sp_add_mc_master" FunctionName="BURN_INModel.Store.sp_add_mc_master" />
+          <FunctionImportMapping FunctionImportName="sp_add_mc_model_master" FunctionName="BURN_INModel.Store.sp_add_mc_model_master" />
+          <FunctionImportMapping FunctionImportName="sp_update_product_type_list_mst" FunctionName="BURN_INModel.Store.sp_update_product_type_list_mst" />
+          <FunctionImportMapping FunctionImportName="sp_display_transaction_operation" FunctionName="BURN_INModel.Store.sp_display_transaction_operation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BURN_INModel.sp_display_transaction_operation_Result">
+                <ScalarProperty Name="TRANSACTION_ID" ColumnName="TRANSACTION_ID" />
+                <ScalarProperty Name="LOT_EDP" ColumnName="LOT_EDP" />
+                <ScalarProperty Name="MC_NUMBER" ColumnName="MC_NUMBER" />
+                <ScalarProperty Name="BOARD_NO" ColumnName="BOARD_NO" />
+                <ScalarProperty Name="BI_BOARD_MODEL" ColumnName="BI_BOARD_MODEL" />
+                <ScalarProperty Name="TYPE_NAME" ColumnName="TYPE_NAME" />
+                <ScalarProperty Name="BI_BOARD_STATUS" ColumnName="BI_BOARD_STATUS" />
+                <ScalarProperty Name="BI_BOARD_STAUS_NAME" ColumnName="BI_BOARD_STAUS_NAME" />
+                <ScalarProperty Name="STATUS_BI" ColumnName="STATUS_BI" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="START_BI_DATE" ColumnName="START_BI_DATE" />
+                <ScalarProperty Name="END_BI_DATE" ColumnName="END_BI_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="BI_TRANSATUS_NAME" ColumnName="BI_TRANSATUS_NAME" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="BI_BOARD_MODEL_PRODUCT_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BOARD_MODEL_PRODUCT_MST">
+              <MappingFragment StoreEntitySet="BI_BOARD_MODEL_PRODUCT_MST">
+                <ScalarProperty Name="PRODUCT_TYPE" ColumnName="PRODUCT_TYPE" />
+                <ScalarProperty Name="CYCLE_PERIOD_TIME" ColumnName="CYCLE_PERIOD_TIME" />
+                <ScalarProperty Name="CYCLE_PERIOD_DAY" ColumnName="CYCLE_PERIOD_DAY" />
+                <ScalarProperty Name="MAX_LIFE_TIME" ColumnName="MAX_LIFE_TIME" />
+                <ScalarProperty Name="BI_BOARD_COORDINATE_Y" ColumnName="BI_BOARD_COORDINATE_Y" />
+                <ScalarProperty Name="BI_BOARD_COORDINATE_X" ColumnName="BI_BOARD_COORDINATE_X" />
+                <ScalarProperty Name="BI_BOARD_MODEL" ColumnName="BI_BOARD_MODEL" />
+                <ScalarProperty Name="BI_BOARD_MODEL_NO" ColumnName="BI_BOARD_MODEL_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_BOARD_PM_TRANS">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BOARD_PM_TRANS">
+              <MappingFragment StoreEntitySet="BI_BOARD_PM_TRANS">
+                <ScalarProperty Name="EMP_UPDATE" ColumnName="EMP_UPDATE" />
+                <ScalarProperty Name="BI_BOARD_NEXT_PM" ColumnName="BI_BOARD_NEXT_PM" />
+                <ScalarProperty Name="BI_BOARD_LAST_PM" ColumnName="BI_BOARD_LAST_PM" />
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+                <ScalarProperty Name="CYCLE_FLAG" ColumnName="CYCLE_FLAG" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="BI_BOARD_TRANS_PM_ID" ColumnName="BI_BOARD_TRANS_PM_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_BOARD_SOCKET_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BOARD_SOCKET_MST">
+              <MappingFragment StoreEntitySet="BI_BOARD_SOCKET_MST">
+                <ScalarProperty Name="SOCKET_STATUS" ColumnName="SOCKET_STATUS" />
+                <ScalarProperty Name="SOCKET_NO" ColumnName="SOCKET_NO" />
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_BOARD_SOCKET_STATUS_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BOARD_SOCKET_STATUS_MST">
+              <MappingFragment StoreEntitySet="BI_BOARD_SOCKET_STATUS_MST">
+                <ScalarProperty Name="SOCKET_STATUS_NAME" ColumnName="SOCKET_STATUS_NAME" />
+                <ScalarProperty Name="SOCKET_STATUS" ColumnName="SOCKET_STATUS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_BOARD_STATUS_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BOARD_STATUS_MST">
+              <MappingFragment StoreEntitySet="BI_BOARD_STATUS_MST">
+                <ScalarProperty Name="BI_BOARD_STAUS_NAME" ColumnName="BI_BOARD_STAUS_NAME" />
+                <ScalarProperty Name="BI_BOARD_STATUS" ColumnName="BI_BOARD_STATUS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_BOARD_TRANS">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BOARD_TRANS">
+              <MappingFragment StoreEntitySet="BI_BOARD_TRANS">
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+                <ScalarProperty Name="BI_RECIPE" ColumnName="BI_RECIPE" />
+                <ScalarProperty Name="BI_MC_NO" ColumnName="BI_MC_NO" />
+                <ScalarProperty Name="HIST_CODE" ColumnName="HIST_CODE" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="BI_BOARD_TRANS_ID" ColumnName="BI_BOARD_TRANS_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_BORD_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_BORD_MST">
+              <MappingFragment StoreEntitySet="BI_BORD_MST">
+                <ScalarProperty Name="BI_BOARD_OPARATE" ColumnName="BI_BOARD_OPARATE" />
+                <ScalarProperty Name="BI_BOARD_STATUS" ColumnName="BI_BOARD_STATUS" />
+                <ScalarProperty Name="BI_BOARD_LIFE_TIME_DAY" ColumnName="BI_BOARD_LIFE_TIME_DAY" />
+                <ScalarProperty Name="BI_BOARD_LIFE_TIME" ColumnName="BI_BOARD_LIFE_TIME" />
+                <ScalarProperty Name="BI_BOARD_NEXT_PM" ColumnName="BI_BOARD_NEXT_PM" />
+                <ScalarProperty Name="BI_BOARD_LAST_PM" ColumnName="BI_BOARD_LAST_PM" />
+                <ScalarProperty Name="BI_BOARD_REGISTRATION_DATE" ColumnName="BI_BOARD_REGISTRATION_DATE" />
+                <ScalarProperty Name="CYCLE_TIME" ColumnName="CYCLE_TIME" />
+                <ScalarProperty Name="LIFE_TIME_REAMIN" ColumnName="LIFE_TIME_REAMIN" />
+                <ScalarProperty Name="LIFE_TIME" ColumnName="LIFE_TIME" />
+                <ScalarProperty Name="BI_BOARD_MODEL" ColumnName="BI_BOARD_MODEL" />
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+                <ScalarProperty Name="BI_BOARD_NO_RUN" ColumnName="BI_BOARD_NO_RUN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_HIST_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_HIST_MST">
+              <MappingFragment StoreEntitySet="BI_HIST_MST">
+                <ScalarProperty Name="HIST_CODE_NAME" ColumnName="HIST_CODE_NAME" />
+                <ScalarProperty Name="HIST_CODE" ColumnName="HIST_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_MC_CONDITION_DB_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_MC_CONDITION_DB_MST">
+              <MappingFragment StoreEntitySet="BI_MC_CONDITION_DB_MST">
+                <ScalarProperty Name="BURN_IN_BOARD_NAME" ColumnName="BURN_IN_BOARD_NAME" />
+                <ScalarProperty Name="BURN_IN_TEMP" ColumnName="BURN_IN_TEMP" />
+                <ScalarProperty Name="BURN_IN_TIME" ColumnName="BURN_IN_TIME" />
+                <ScalarProperty Name="PROGRAM_NAME" ColumnName="PROGRAM_NAME" />
+                <ScalarProperty Name="PACKAGE" ColumnName="PACKAGE" />
+                <ScalarProperty Name="TYPE_NAME" ColumnName="TYPE_NAME" />
+                <ScalarProperty Name="BI_MC" ColumnName="BI_MC" />
+                <ScalarProperty Name="CODITION_NO" ColumnName="CODITION_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_MC_MODEL_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_MC_MODEL_MST">
+              <MappingFragment StoreEntitySet="BI_MC_MODEL_MST">
+                <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+                <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="BI_MC_CAPACITY_BOARD" ColumnName="BI_MC_CAPACITY_BOARD" />
+                <ScalarProperty Name="BI_MC_MODEL" ColumnName="BI_MC_MODEL" />
+                <ScalarProperty Name="BI_MC_MODEL_RUN_NO" ColumnName="BI_MC_MODEL_RUN_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_MC_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_MC_MST">
+              <MappingFragment StoreEntitySet="BI_MC_MST">
+                <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+                <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="BI_MC_MODEL" ColumnName="BI_MC_MODEL" />
+                <ScalarProperty Name="BI_MC_NO" ColumnName="BI_MC_NO" />
+                <ScalarProperty Name="BI_MC_NO_RUN" ColumnName="BI_MC_NO_RUN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_MC_RECIPE_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_MC_RECIPE_MST">
+              <MappingFragment StoreEntitySet="BI_MC_RECIPE_MST">
+                <ScalarProperty Name="TIME" ColumnName="TIME" />
+                <ScalarProperty Name="PRODUCT_TYPE" ColumnName="PRODUCT_TYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_MC_STATUS">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_MC_STATUS">
+              <MappingFragment StoreEntitySet="BI_MC_STATUS">
+                <ScalarProperty Name="BI_BOARD_NO" ColumnName="BI_BOARD_NO" />
+                <ScalarProperty Name="BI_SLOT_STATUS" ColumnName="BI_SLOT_STATUS" />
+                <ScalarProperty Name="BI_SLOT_NO" ColumnName="BI_SLOT_NO" />
+                <ScalarProperty Name="BI_MODEL" ColumnName="BI_MODEL" />
+                <ScalarProperty Name="BI_CHAMBER_NO" ColumnName="BI_CHAMBER_NO" />
+                <ScalarProperty Name="BI_MC_NO" ColumnName="BI_MC_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_OPERATION_TRANSACTION">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_OPERATION_TRANSACTION">
+              <MappingFragment StoreEntitySet="BI_OPERATION_TRANSACTION">
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="END_BI_DATE" ColumnName="END_BI_DATE" />
+                <ScalarProperty Name="START_BI_DATE" ColumnName="START_BI_DATE" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="STATUS_BI" ColumnName="STATUS_BI" />
+                <ScalarProperty Name="TYPE_NAME" ColumnName="TYPE_NAME" />
+                <ScalarProperty Name="BOARD_NO" ColumnName="BOARD_NO" />
+                <ScalarProperty Name="MC_NUMBER" ColumnName="MC_NUMBER" />
+                <ScalarProperty Name="LOT_EDP" ColumnName="LOT_EDP" />
+                <ScalarProperty Name="TRANSACTION_ID" ColumnName="TRANSACTION_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_PRODUCT_TYPE_LIST_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_PRODUCT_TYPE_LIST_MST">
+              <MappingFragment StoreEntitySet="BI_PRODUCT_TYPE_LIST_MST">
+                <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+                <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="PRODUCT_TYPE_CONVERT" ColumnName="PRODUCT_TYPE_CONVERT" />
+                <ScalarProperty Name="PRODUCT_TYPE_AXIS" ColumnName="PRODUCT_TYPE_AXIS" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BI_TRANSACTION_STATUS_MST">
+            <EntityTypeMapping TypeName="BURN_INModel.BI_TRANSACTION_STATUS_MST">
+              <MappingFragment StoreEntitySet="BI_TRANSACTION_STATUS_MST">
+                <ScalarProperty Name="BI_TRANSATUS_NAME" ColumnName="BI_TRANSATUS_NAME" />
+                <ScalarProperty Name="BI_TRAN_STATUS_ID" ColumnName="BI_TRAN_STATUS_ID" />
+                <ScalarProperty Name="BI_TRANSACTION_STATUS" ColumnName="BI_TRANSACTION_STATUS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_update_operation_bi" FunctionName="BURN_INModel.Store.sp_update_operation_bi" />
+          <EntitySetMapping Name="sdt_member">
+            <EntityTypeMapping TypeName="BURN_INModel.sdt_member">
+              <MappingFragment StoreEntitySet="sdt_member">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Process" ColumnName="Process" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="GenerateDate" ColumnName="GenerateDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="GlobalID" ColumnName="GlobalID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Organize" ColumnName="Organize" />
+                <ScalarProperty Name="SurnameThai" ColumnName="SurnameThai" />
+                <ScalarProperty Name="NameThai" ColumnName="NameThai" />
+                <ScalarProperty Name="SurnameEng" ColumnName="SurnameEng" />
+                <ScalarProperty Name="NameEng" ColumnName="NameEng" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_login_axis" FunctionName="BURN_INModel.Store.sp_login_axis">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BURN_INModel.sp_login_axis_Result">
+                <ScalarProperty Name="EMP_ID" ColumnName="EMP_ID" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="EMP_NAME" ColumnName="EMP_NAME" />
+                <ScalarProperty Name="EMP_LINE_KB" ColumnName="EMP_LINE_KB" />
+                <ScalarProperty Name="DEPARTMENT_CODE" ColumnName="DEPARTMENT_CODE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

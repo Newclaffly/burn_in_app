@@ -1,0 +1,336 @@
+﻿@{
+    ViewBag.Title = "operation_record";
+}
+@if (Session["GOALBAL_ID"] != null)
+{
+    <style>
+        .table th, td {
+            color: black;
+            text-align: center;
+        }
+
+        .scanner {
+            width: 40%;
+            height: 150px;
+        }
+
+        table, tr td {
+            border: 1px solid red
+        }
+
+        tbody {
+            display: block;
+            height: 40vh;
+            overflow: auto;
+        }
+
+            thead, tbody tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed; /* even columns width , fix width of table too*/
+            }
+
+        thead {
+            width: calc( 100% - 1em ) /* scrollbar is average 1em/16px width, remove it from thead width */
+        }
+
+        table {
+            width: 400px;
+        }
+    </style>
+    <input type="hidden" value="@Session["GOALBAL_ID"].ToString()" id="temp_user" />
+
+    <div class="col-sm-12">
+        <div class="col-sm-12">
+            <div class="card h-100" style="">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Burn-In Information</b></h5>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="card h-100" style="">
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>Information required </b></h5>
+                                    <div class="badge bg-primary text-wrap" style="width: 6rem;">
+                                        Please follow operation.
+                                    </div>
+                                    <div class="input-group mb-3 mt-2">
+                                        <span class="input-group-text">Lot.EDP</span>
+                                        <input type="text" class="form-control" id="input_lot_card" aria-describedby="">
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text">Select M/C</label>
+                                        <select class="form-select" id="selection_mc">
+                                            <option selected>Choose...</option>
+                                        </select>
+                                    </div>
+                                    <div class="text-center">
+                                        <img src="~/Content/IMG/barcode-scanner.png" class="scanner" alt="...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="card h-100" style="">
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>Scan Board</b></h5>
+                                    <div class="row">
+                                        <div class="col-sm-3 input-group mb-3">
+                                            <span class="input-group-text">Board No. :</span>
+                                            <input type="text" class="form-control" id="input_board_no_scanner" aria-describedby="">
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <button class="btn btn-theme pull-left" type="button" id="toleft"></button>
+                                            <button class="btn btn-outline-primary" type="button" id="btn_confrim_board_list">Confirm</button>
+                                            <button class="btn btn-theme pull-right" type="button" id="toright"></button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <h5 class="card-title mt-2"><b>List Board pickup</b></h5>
+                                        <table class="table table-bordered table-hover" id="table_bi_scan_board">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Board No.</th>
+                                                    <th scope="col">Tools</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast_record_success" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-light">
+                <h6 class="my-0">Board No.</h6>
+            </div>
+            <div class="toast-body">
+                <h6>Pickup Board Completed!</h6>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast_record_fail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-light">
+                <h6 class="my-0">Board No.</h6>
+            </div>
+            <div class="toast-body">
+                <h6>Board PM Expired not using!</h6>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast_record_no_master" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-light">
+                <h6 class="my-0">Board Error</h6>
+            </div>
+            <div class="toast-body">
+                <h6>Board not register master!</h6>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            get_mc_bi();
+
+            $("#input_lot_card").focus();
+            var table = $('#table_bi_scan_board tbody').empty();
+
+            $('#input_board_no_scanner').keyup(function (e) {
+                if (e.keyCode == 13) {
+                    check_board_status($('#input_board_no_scanner').val());
+                } else {
+
+                }
+            });
+
+            function check_board_status(para) {
+                var temp = para;
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_board_status",
+                    data: { "board_no_temp": temp },
+                    datatype: "json",
+                    success: function (data) {
+                        console.log(data);
+                        var bi_board_status;
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                bi_board_status = val.BI_BOARD_STATUS;
+                            });
+                        });
+                        //console.log(bi_board_status);
+
+                        if (bi_board_status == 'PM_EP') {
+                            new bootstrap.Toast(document.querySelector('#toast_record_fail')).show();
+                            $("#input_board_no_scanner").val('');
+                            $("#input_board_no_scanner").focus();
+
+                        } else if (bi_board_status == 'P') {
+                            if ($('#input_board_no_scanner').val()) {
+                                var barCode = $('#input_board_no_scanner').val();
+                                if ($('#table_bi_scan_board td:eq(0):contains(' + barCode + ')').length) {
+                                    $('#table_bi_scan_board td:eq(0):contains(' + barCode + ')').next().text();
+                                } else {
+
+                                    var thing = '<tr><td>' + barCode + '</td>';
+                                    thing += '</td><td><button class="btn btn-sm btn-danger remove"  id=' + barCode + '>Delete</button></td></tr>'
+                                    $('#table_bi_scan_board').append(thing);
+
+                                }
+                                new bootstrap.Toast(document.querySelector('#toast_record_success')).show();
+                                $('#input_board_no_scanner').val('');
+                                $("#input_board_no_scanner").focus();
+                            }
+
+                        } else {
+                            new bootstrap.Toast(document.querySelector('#toast_record_no_master')).show();
+                            $("#input_board_no_scanner").val('');
+                            $("#input_board_no_scanner").focus();
+                        }
+
+                    },
+                    error: function (request, status, error) {
+
+                    }
+                })
+            }
+           
+
+            $('#btn_confrim_board_list').click(function () {
+                //Loop through the Table rows and build a JSON array.
+                var covers = new Array();
+                //console.log(get_request_no);
+                $("#table_bi_scan_board tbody tr").each(function () {
+                    var row = $(this);
+                    var cover = {};
+                    cover.LOT_EDP = $('#input_lot_card').val();
+                    cover.MC_NUMBER = $('#selection_mc option:selected').val();
+                    cover.BOARD_NO = row.find("td").eq(0).html();
+                    cover.STATUS_BI = 'WTS';
+                    cover.CREATE_DATE = new Date(Date.now());
+                    cover.CREATE_BY = $("#temp_user").val();
+
+                    covers.push(cover);
+                });
+                console.log(JSON.stringify(covers));
+                //Send the JSON array to Controller using AJAX.
+                $.ajax({
+                    type: "POST",
+                    url: "./insert_transaction_operation_bi",
+                    data: JSON.stringify({
+                        covers: covers
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        //clear datatable
+                        //table.clear().draw();
+                        var table = $('#table_bi_scan_board tbody').empty();
+                        ////destroy datatable
+                        //table.destroy();
+                        $("#input_board_no_scanner").val('');
+                        $("#input_lot_card").val('');
+                        $("#selection_mc").val('');
+                        $("#input_lot_card").focus();
+                        $("#table_bi_scan_board td:first-child").remove();
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Data has been save',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                });
+            });// end fucntion
+
+            $('#table_bi_scan_board').on('click', 'tr button', function (e) {
+                e.preventDefault();
+                $(this).parents('tr').remove();
+            });
+
+            //$('#table_bi_scan_board td').filter(function () {
+            //    return $(this).text() == 'TEST01';
+            //}).css('background-color', 'red');
+
+            //function highlightDuplicates() {
+            //    // loop over all input fields in table
+            //    $('#table_bi_scan_board').find('input').each(function () {
+            //        // check if there is another one with the same value
+            //        if ($('#table_bi_scan_board').find('input[value="' + $(this).val() + '"]').size() > 1) {
+            //            // highlight this
+            //            console.log('dup');
+            //        } else {
+            //            console.log('not dup');
+
+            //            // otherwise remove
+            //        }
+            //    });
+            //}
+
+
+            function get_mc_bi() {
+                $.ajax({
+                    type: "POST",
+                    url: "./ajax_get_mc_mst",
+                    datatype: "json",
+                    success: function (data) {
+                        var $select = $('#selection_mc');
+                        $.each(data, function (i) {
+                            $.each(data[i], function (key, val) {
+                                $select.append('<option value=' + val.BI_MC_NO + '>' + val.BI_MC_NO + '</option>');
+                            });
+                        });
+                    }
+                })
+            }
+
+
+        });
+    </script>
+
+    <!-- Modal table list master board BI -->
+    <div class="modal fade" id="modal_list_board_bi" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">Modal table board master list</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <table class="table table-bordered table-hover" id="table_modal_master_list_bi">
+                            <thead>
+                                <tr>
+                                    <th>Board No.</th>
+                                    <th>Board Model</th>
+                                    <th>Board Socket Qty</th>
+                                    <th>Board Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect("~/Login/Login_axis");
+}
